@@ -21,6 +21,8 @@
     --ember-deep:#7a2710;
     --fog:#7c7274;
     --line: rgba(241,233,223,0.09);
+    --acid:#9dff5e;
+    --acid-deep:#3f7a1f;
     --ff-display:'Fraunces', serif;
     --ff-body:'Work Sans', sans-serif;
     --ff-mono:'JetBrains Mono', monospace;
@@ -118,9 +120,15 @@
   }
   .hero::before{
     content:"";
-    position:absolute; inset:0;
+    position:absolute; inset:0; z-index:1;
     background:linear-gradient(180deg, rgba(9,7,8,.45) 0%, rgba(9,7,8,.68) 55%, rgba(9,7,8,.93) 100%);
   }
+  .hero-novelty-bg{
+    position:absolute; inset:0; z-index:0;
+    background-size:cover; background-position:center;
+    opacity:0; transition:opacity .8s ease;
+  }
+  .hero-novelty-bg.is-active{ opacity:1; }
   .hero-arrow{
     position:absolute; top:50%; transform:translateY(-50%);
     width:32px; height:32px; border-radius:50%;
@@ -163,7 +171,6 @@
   .hero.is-compact .offer-tag{ padding:.28rem .55rem; border-width:1px; }
   .hero.is-compact .offer-tag svg{ width:13px; height:13px; }
   .hero.is-compact .offer-tag span{ font-size:.62rem; }
-  .hero.is-compact .novelty-photo{ width:42px; height:42px; border-radius:8px; }
   .hero.is-compact .novelty-caption{ max-height:0; opacity:0; margin:0; overflow:hidden; }
   .hero.is-compact .novelty-feature-name{ max-height:0; opacity:0; margin:0; }
   .hero.is-compact .hero-arrow{ width:26px; height:26px; }
@@ -233,10 +240,16 @@
     border-radius:7px; padding:.45rem .75rem;
     backdrop-filter:blur(2px);
   }
+  .offer-tag-featured{ border-width:2px; border-color:var(--ember-bright); background:rgba(40,12,5,.7); }
   .offer-tag svg{ width:16px; height:16px; color:var(--ember-bright); flex:0 0 auto; }
   .offer-tag span{
     font-family:var(--ff-body); font-weight:700; font-size:.74rem;
     color:#fff; text-align:left; line-height:1.2;
+  }
+  .tag-highlight{
+    font-family:var(--ff-display); font-weight:800; text-transform:uppercase;
+    font-size:1.05em; letter-spacing:.02em; color:#ff5230;
+    text-shadow:0 0 14px rgba(255,82,48,.55);
   }
 
   .hero-trust{
@@ -251,33 +264,24 @@
   .trust-item svg{ width:14px; height:14px; color:var(--ember-bright); flex:0 0 auto; }
   .trust-sep{ display:inline-block; width:1px; height:13px; background:rgba(255,255,255,.3); }
 
-  /* ---------- novelty: clean contained photo, consistent with the other slides ---------- */
+  /* ---------- novelty: photo lives in the background; this is just the caption ---------- */
   .novelty-feature{
     display:block; background:none; border:none; padding:0; cursor:pointer;
     margin:0 auto;
   }
-  .novelty-photo{
-    display:block; margin:0 auto;
-    width:clamp(150px, 36vw, 200px);
-    height:clamp(150px, 36vw, 200px);
-    object-fit:cover; border-radius:16px;
-    box-shadow:0 16px 32px rgba(0,0,0,.5);
-    transition:transform .3s ease, width .3s ease, height .3s ease;
-  }
-  .novelty-feature:hover .novelty-photo{ transform:scale(1.04); }
   .novelty-caption{
-    display:flex; flex-direction:column; align-items:center; gap:.2rem;
-    margin:.55rem 0 .5rem;
+    display:flex; flex-direction:column; align-items:center; gap:.3rem;
+    margin:.2rem 0 .9rem;
   }
   .novelty-caption-cat{
-    font-family:var(--ff-mono); font-size:.6rem; letter-spacing:.14em;
+    font-family:var(--ff-mono); font-size:.65rem; letter-spacing:.16em;
     text-transform:uppercase; color:var(--ember-bright);
-    text-shadow:0 2px 8px rgba(0,0,0,.75);
+    text-shadow:0 2px 8px rgba(0,0,0,.8);
   }
   .novelty-caption-name{
-    font-family:var(--ff-display); font-weight:600;
-    font-size:.95rem; color:#fff; text-align:center;
-    text-shadow:0 2px 10px rgba(0,0,0,.75);
+    font-family:var(--ff-display); font-weight:700;
+    font-size:clamp(1.3rem, 4vw, 1.8rem); color:#fff; text-align:center;
+    text-shadow:0 3px 14px rgba(0,0,0,.85);
   }
 
   .glitch{ color:var(--ember-bright); position:relative; }
@@ -585,14 +589,18 @@
   .subscribe-cta{
     display:inline-flex; align-items:center; gap:.55rem;
     font-family:var(--ff-body); font-weight:700; font-size:.92rem;
-    color:var(--ember-bright); background:transparent;
-    border:1.5px dashed var(--ember); border-radius:999px;
+    color:#fff; background:linear-gradient(135deg, #d62828, #861515);
+    border:1.5px solid #ff5c4d; border-radius:999px;
     padding:.8rem 1.6rem; cursor:pointer;
-    transition:background .25s, color .25s, border-style .25s;
+    box-shadow:0 10px 26px rgba(180,20,20,.4);
+    transition:transform .2s, box-shadow .2s, background .25s;
   }
   .subscribe-cta svg{ width:18px; height:18px; flex:0 0 auto; }
-  .subscribe-cta:hover{ background:rgba(227,73,31,.12); border-style:solid; }
-  .subscribe-cta.is-subscribed{ border-style:solid; color:var(--bone); }
+  .subscribe-cta:hover{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(180,20,20,.55); }
+  .subscribe-cta.is-subscribed{
+    background:var(--charcoal-soft); color:var(--bone-dim);
+    border-color:var(--line); box-shadow:none;
+  }
   .cta-divider{ width:100%; max-width:200px; height:1px; background:var(--line); margin:.5rem 0; }
 
   .cta-eyebrow{ font-family:var(--ff-mono); font-size:.72rem; letter-spacing:.2em; color:var(--fog); text-transform:uppercase; }
@@ -695,7 +703,6 @@
     .hero-trust{ gap:.5rem .7rem; font-size:.56rem; }
     .trust-item svg{ width:13px; height:13px; }
     .trust-sep{ height:11px; }
-    .novelty-photo{ width:135px; height:135px; }
     .novelty-feature-name{ font-size:.82rem; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
@@ -862,7 +869,9 @@
 <!-- ============ HOME VIEW ============ -->
 <section class="view" id="view-home">
 
+  <div id="heroSentinel" aria-hidden="true" style="position:relative;height:1px;width:100%;"></div>
   <section class="hero">
+    <div class="hero-novelty-bg" id="heroNoveltyBg"></div>
     <button type="button" class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Oferta anterior">
       <svg viewBox="0 0 24 24"><use href="#i-chevron"/></svg>
     </button>
@@ -1792,26 +1801,16 @@
     {
       type: "offer",
       claim: 'No es solo una marca, es una <span class="glitch">declaración</span>',
-      bigNum: "10%",
-      bigWords: [ {text:"OFF", cls:"is-red"} ],
       tags: [
-        { icon:"i-cash", text:"con transferencia" },
+        { icon:"i-cash", highlight:"10% OFF", text:"con transferencia" },
         { icon:"i-card", text:"hasta 2 cuotas sin interés con tarjeta" }
-      ]
-    },
-    {
-      type: "offer",
-      bigNum: "2",
-      bigWords: [ {text:"CUOTAS", cls:"is-white"}, {text:"SIN INTERÉS", cls:"is-red"} ],
-      tags: [
-        { icon:"i-card", text:"con tarjeta de crédito" }
       ]
     },
     {
       // Cuando agregues un producto nuevo o reponas stock, sumá un objeto
       // así (mismo formato) y va a entrar en la rotación del banner.
       type: "novelty",
-      kind: "new",            // "new" -> "✦ Novedades" · "restock" -> "✦ Reingreso"
+      kind: "new",            // "new" -> "Nuevo" · "restock" -> "Reingreso"
       productId: "p14"
     }
     // Agregá más objetos acá (mismo formato) y se suman a la rotación de 5s.
@@ -1821,24 +1820,18 @@
     if(slide.type === "novelty"){
       const p = PRODUCTS_BY_ID[slide.productId];
       if(!p) return '<div class="offer-slide"></div>';
-      const photo = CATEGORY_IMAGES[p.cat];
-      const icon = ICONS[p.cat] || "i-frame";
       const isNew = slide.kind === "new";
       const tagLabel = isNew ? "Nuevo · recién llegado a la tienda" : "Reingreso · volvió a haber stock";
-      const photoHTML = photo
-        ? `<img class="novelty-photo" src="${photo}" alt="">`
-        : `<span class="novelty-photo" style="display:flex;align-items:center;justify-content:center;background:var(--charcoal-soft);"><svg viewBox="0 0 24 24" style="width:30px;height:30px;color:var(--ember);"><use href="#${icon}"/></svg></span>`;
       return `
         <div class="offer-slide">
           <button type="button" class="novelty-feature" data-cat="${p.cat}">
-            ${photoHTML}
+            <div class="novelty-caption">
+              <span class="novelty-caption-cat">${p.catLabel}</span>
+              <span class="novelty-caption-name">${p.name}</span>
+            </div>
           </button>
-          <div class="novelty-caption">
-            <span class="novelty-caption-cat">${p.catLabel}</span>
-            <span class="novelty-caption-name">${p.name}</span>
-          </div>
           <div class="offer-tags">
-            <div class="offer-tag">
+            <div class="offer-tag offer-tag-featured">
               <svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg>
               <span>${tagLabel}</span>
             </div>
@@ -1848,20 +1841,15 @@
 
     const eyebrowHTML = slide.eyebrow ? `<span class="offer-eyebrow">${slide.eyebrow}</span>` : '';
     const claimHTML = slide.claim ? `<p class="offer-claim">${slide.claim}</p>` : '';
-    const wordsHTML = slide.bigWords.map(w => `<span class="offer-big-word ${w.cls}">${w.text}</span>`).join('');
     const tagsHTML = slide.tags.map(t => `
-      <div class="offer-tag">
+      <div class="offer-tag${t.highlight ? ' offer-tag-featured' : ''}">
         <svg viewBox="0 0 24 24"><use href="#${t.icon}"/></svg>
-        <span>${t.text}</span>
+        <span>${t.highlight ? `<strong class="tag-highlight">${t.highlight}</strong> ` : ''}${t.text}</span>
       </div>`).join('');
     return `
       <div class="offer-slide">
         ${eyebrowHTML}
         ${claimHTML}
-        <div class="offer-big">
-          <span class="offer-big-num">${slide.bigNum}</span>
-          ${wordsHTML}
-        </div>
         <div class="offer-tags">${tagsHTML}</div>
       </div>`;
   }
@@ -1872,11 +1860,25 @@
     const slides = wrap.querySelectorAll('.offer-slide');
     const prevBtn = document.getElementById('heroPrev');
     const nextBtn = document.getElementById('heroNext');
+    const noveltyBg = document.getElementById('heroNoveltyBg');
     slides[0].classList.add('is-active');
 
     wrap.querySelectorAll('.novelty-feature').forEach(btn => {
       btn.addEventListener('click', () => showView('catalog', {cat:btn.dataset.cat, query:''}));
     });
+
+    function applyNoveltyBg(activeIdx){
+      const data = OFFER_SLIDES[activeIdx];
+      const p = data && data.type === 'novelty' ? PRODUCTS_BY_ID[data.productId] : null;
+      const photo = p ? CATEGORY_IMAGES[p.cat] : null;
+      if(photo){
+        noveltyBg.style.backgroundImage = `url('${photo}')`;
+        noveltyBg.classList.add('is-active');
+      } else {
+        noveltyBg.classList.remove('is-active');
+      }
+    }
+    applyNoveltyBg(0);
 
     if(slides.length < 2){
       prevBtn.hidden = true;
@@ -1891,6 +1893,7 @@
       slides[idx].classList.remove('is-active');
       idx = (newIdx + slides.length) % slides.length;
       slides[idx].classList.add('is-active');
+      applyNoveltyBg(idx);
     }
     function startAuto(){
       if(reduce) return;
@@ -1919,24 +1922,36 @@
   /* =========================================================
      HERO COMPACT-ON-SCROLL
      (banner stays pinned, but shrinks to the essentials once
-     you scroll, so products/everything else get room to breathe)
+     you scroll, so products/everything else get room to breathe.
+     Uses IntersectionObserver instead of manual scroll-position
+     math — it's the standard, battle-tested technique for this
+     exact pattern and behaves consistently across phones/browsers,
+     unlike hand-rolled scroll-offset thresholds.)
   ========================================================= */
   (function(){
     const hero = document.querySelector('.hero');
-    if(!hero) return;
-    const THRESHOLD = 40;
-    let ticking = false;
-    function update(){
-      hero.classList.toggle('is-compact', window.scrollY > THRESHOLD);
-      ticking = false;
+    const sentinel = document.getElementById('heroSentinel');
+    if(!hero || !sentinel || !('IntersectionObserver' in window)) return;
+    let observer = null;
+
+    function setup(){
+      if(observer) observer.disconnect();
+      const topbar = document.querySelector('.topbar');
+      const topbarH = topbar ? topbar.offsetHeight : 0;
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          hero.classList.toggle('is-compact', !entry.isIntersecting);
+        });
+      }, { rootMargin: `-${topbarH}px 0px 0px 0px`, threshold: 0 });
+      observer.observe(sentinel);
     }
-    window.addEventListener('scroll', () => {
-      if(!ticking){
-        requestAnimationFrame(update);
-        ticking = true;
-      }
+
+    setup();
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(setup, 150);
     }, {passive:true});
-    update(); // in case the page loads already scrolled (e.g. on refresh)
   })();
 
   /* =========================================================
