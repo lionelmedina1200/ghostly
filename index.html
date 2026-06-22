@@ -138,6 +138,31 @@
 
   .hero-content{ position:relative; z-index:2; text-align:center; padding:0 1rem; max-width:640px; margin:0 auto; }
 
+  /* -- compact mode: kicks in once the user scrolls, shrinking the pinned banner
+        down to just the essentials so the rest of the page gets breathing room -- */
+  .hero{ transition:padding .35s ease; }
+  .hero-logo-wrap{ transition:opacity .3s ease, max-height .35s ease, margin .35s ease; overflow:hidden; }
+  .hero-trust{ transition:opacity .3s ease, max-height .35s ease, margin .35s ease, padding .35s ease; overflow:hidden; }
+  .offer-claim, .offer-tags{ transition:opacity .25s ease, max-height .35s ease, margin .35s ease; overflow:hidden; }
+  .offer-big-num, .offer-big-word{ transition:font-size .35s ease; }
+  .novelty-feature-img{ transition:width .35s ease, height .35s ease, transform .3s ease; }
+  .novelty-headline{ transition:font-size .35s ease; }
+  .novelty-feature-name{ transition:opacity .25s ease, max-height .35s ease, margin .35s ease; overflow:hidden; }
+
+  .hero.is-compact{ padding-top:.55rem; padding-bottom:.55rem; }
+  .hero.is-compact .hero-logo-wrap{ max-height:0; opacity:0; margin:0; }
+  .hero.is-compact .hero-trust{ max-height:0; opacity:0; margin:0; padding-top:0; border-top-color:transparent; }
+  .hero.is-compact .offer-claim{ max-height:0; opacity:0; margin:0; }
+  .hero.is-compact .offer-tags{ max-height:0; opacity:0; margin:0; }
+  .hero.is-compact .offer-big{ margin-bottom:0; }
+  .hero.is-compact .offer-big-num{ font-size:clamp(1.5rem, 5vw, 2.1rem); }
+  .hero.is-compact .offer-big-word{ font-size:clamp(1rem, 3.4vw, 1.4rem); }
+  .hero.is-compact .novelty-feature-img{ width:42px; height:42px; }
+  .hero.is-compact .novelty-headline{ font-size:clamp(1rem, 4vw, 1.5rem); }
+  .hero.is-compact .novelty-feature-name{ max-height:0; opacity:0; margin:0; }
+  .hero.is-compact .hero-arrow{ width:26px; height:26px; }
+  .hero.is-compact .hero-arrow svg{ width:12px; height:12px; }
+
   .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:.4rem; }
   .hero-logo{
     width:min(170px, 34vw);
@@ -232,25 +257,32 @@
   .trust-item svg{ width:14px; height:14px; color:var(--ember-bright); flex:0 0 auto; }
   .trust-sep{ width:1px; height:13px; background:rgba(255,255,255,.3); }
 
-  /* ---------- novelty: the product photo IS the slide ---------- */
-  .novelty-eyebrow{ margin-bottom:.5rem; }
+  /* ---------- novelty: photo floats free beside a big headline (no frame) ---------- */
   .novelty-feature{
-    display:flex; flex-direction:column; align-items:center; gap:.55rem;
+    display:flex; align-items:center; justify-content:center; gap:1.1rem;
     background:none; border:none; padding:0; cursor:pointer;
+    width:100%; max-width:520px; margin:0 auto;
+  }
+  .novelty-headline{
+    flex:1; text-align:right;
+    font-family:var(--ff-display); font-weight:800; line-height:.9;
+    font-size:clamp(1.5rem, 6.5vw, 2.7rem); color:#fff;
+    text-shadow:0 4px 0 rgba(0,0,0,.45), 0 0 34px rgba(0,0,0,.65);
   }
   .novelty-feature-img{
-    width:clamp(110px, 26vw, 160px);
-    height:clamp(110px, 26vw, 160px);
-    border-radius:16px; object-fit:cover;
-    border:2px solid var(--ember);
-    box-shadow:0 16px 32px rgba(0,0,0,.5), 0 0 34px rgba(227,73,31,.3);
-    transition:transform .3s ease, border-color .3s ease;
+    flex:0 0 auto;
+    width:clamp(96px, 24vw, 156px);
+    height:clamp(96px, 24vw, 156px);
+    border-radius:50%; object-fit:cover;
+    box-shadow:0 16px 30px rgba(0,0,0,.55);
+    transition:transform .3s ease;
   }
-  .novelty-feature:hover .novelty-feature-img{ transform:scale(1.04); border-color:var(--ember-bright); }
+  .novelty-feature:hover .novelty-feature-img{ transform:scale(1.05); }
   .novelty-feature-name{
-    font-family:var(--ff-display); font-weight:700;
-    font-size:clamp(1rem, 2.4vw, 1.3rem); color:#fff;
-    text-shadow:0 3px 14px rgba(0,0,0,.8);
+    display:block; margin-top:.5rem;
+    font-family:var(--ff-body); font-weight:600;
+    font-size:.82rem; color:rgba(255,255,255,.85);
+    text-shadow:0 2px 10px rgba(0,0,0,.75);
   }
 
   .glitch{ color:var(--ember-bright); position:relative; }
@@ -652,6 +684,8 @@
     .hero-trust{ gap:.5rem .7rem; font-size:.56rem; }
     .trust-item svg{ width:13px; height:13px; }
     .trust-sep{ height:11px; }
+    .novelty-feature{ flex-direction:column; gap:.5rem; }
+    .novelty-headline{ text-align:center; }
     .novelty-feature-img{ width:90px; height:90px; }
     .novelty-feature-name{ font-size:.85rem; }
     .ticker{ padding:1.8rem 0 2rem; }
@@ -1683,17 +1717,17 @@
       const photo = CATEGORY_IMAGES[p.cat];
       const icon = ICONS[p.cat] || "i-frame";
       const isNew = slide.kind === "new";
-      const eyebrowLabel = isNew ? "✦ Novedades" : "✦ Reingreso";
+      const headline = isNew ? "NOVEDADES" : "REINGRESO";
       const imgHTML = photo
         ? `<img class="novelty-feature-img" src="${photo}" alt="">`
-        : `<span class="novelty-feature-img" style="display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" style="width:34px;height:34px;color:var(--ember);"><use href="#${icon}"/></svg></span>`;
+        : `<span class="novelty-feature-img" style="display:flex;align-items:center;justify-content:center;background:var(--charcoal-soft);"><svg viewBox="0 0 24 24" style="width:34px;height:34px;color:var(--ember);"><use href="#${icon}"/></svg></span>`;
       return `
         <div class="offer-slide">
-          <span class="offer-eyebrow novelty-eyebrow">${eyebrowLabel}</span>
           <button type="button" class="novelty-feature" data-cat="${p.cat}">
+            <span class="novelty-headline">${headline}</span>
             ${imgHTML}
-            <span class="novelty-feature-name">${p.name}</span>
           </button>
+          <span class="novelty-feature-name">${p.name}</span>
         </div>`;
     }
 
@@ -1766,6 +1800,29 @@
     if(topbar) document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
   }
   window.addEventListener('resize', syncTopbarHeight);
+
+  /* =========================================================
+     HERO COMPACT-ON-SCROLL
+     (banner stays pinned, but shrinks to the essentials once
+     you scroll, so products/everything else get room to breathe)
+  ========================================================= */
+  (function(){
+    const hero = document.querySelector('.hero');
+    if(!hero) return;
+    const THRESHOLD = 40;
+    let ticking = false;
+    function update(){
+      hero.classList.toggle('is-compact', window.scrollY > THRESHOLD);
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if(!ticking){
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, {passive:true});
+    update(); // in case the page loads already scrolled (e.g. on refresh)
+  })();
 
   /* =========================================================
      INIT
