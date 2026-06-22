@@ -205,13 +205,15 @@
 
   .hero-trust{
     display:flex; align-items:center; justify-content:center;
-    gap:1rem; flex-wrap:wrap;
-    font-family:var(--ff-mono); font-size:.68rem; letter-spacing:.05em;
+    gap:1.6rem; flex-wrap:wrap;
+    margin-top:.3rem; padding-top:1.2rem;
+    border-top:1px solid rgba(255,255,255,.18);
+    font-family:var(--ff-mono); font-size:.92rem; font-weight:700; letter-spacing:.02em;
     text-transform:uppercase; color:#fff;
   }
-  .trust-item{ display:inline-flex; align-items:center; gap:.4rem; }
-  .trust-item svg{ width:15px; height:15px; color:var(--ember-bright); flex:0 0 auto; }
-  .trust-sep{ width:1px; height:14px; background:rgba(255,255,255,.25); }
+  .trust-item{ display:inline-flex; align-items:center; gap:.55rem; text-shadow:0 2px 10px rgba(0,0,0,.85); }
+  .trust-item svg{ width:21px; height:21px; color:var(--ember-bright); flex:0 0 auto; }
+  .trust-sep{ width:1px; height:20px; background:rgba(255,255,255,.3); }
 
   .glitch{ color:var(--ember-bright); position:relative; }
   @media (prefers-reduced-motion:no-preference){
@@ -591,7 +593,9 @@
     .offer-claim{ font-size:.88rem; }
     .offer-tag{ padding:.7rem .9rem; }
     .offer-tag span{ font-size:.88rem; }
-    .hero-trust{ gap:.6rem; }
+    .hero-trust{ gap:.7rem 1rem; font-size:.66rem; }
+    .trust-item svg{ width:16px; height:16px; }
+    .trust-sep{ height:14px; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
     .ticker-card{ height:185px; }
@@ -1502,7 +1506,6 @@
       ]
     },
     {
-      eyebrow: "Activamos",
       bigNum: "2",
       bigWords: [ {text:"CUOTAS", cls:"is-white"}, {text:"SIN INTERÉS", cls:"is-red"} ],
       tags: [
@@ -1549,7 +1552,7 @@
       slides[idx].classList.remove('is-active');
       idx = (idx + 1) % slides.length;
       slides[idx].classList.add('is-active');
-    }, 3000);
+    }, 5000);
   }
 
   /* =========================================================
