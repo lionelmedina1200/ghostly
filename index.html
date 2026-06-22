@@ -167,30 +167,14 @@
   .hero-logo{
     width:min(170px, 34vw);
     display:block; margin:0 auto;
-    filter:
-      drop-shadow(0 0 4px rgba(0,0,0,.6))
-      drop-shadow(0 0 26px rgba(227,73,31,.55))
-      drop-shadow(0 0 55px rgba(170,15,10,.4))
-      contrast(1.1) saturate(1.12);
+    filter:drop-shadow(0 0 16px rgba(227,73,31,.6));
   }
   @media (prefers-reduced-motion:no-preference){
     .hero-logo{ animation:eerie-glow 4.5s ease-in-out infinite; }
   }
   @keyframes eerie-glow{
-    0%,100%{
-      filter:
-        drop-shadow(0 0 4px rgba(0,0,0,.6))
-        drop-shadow(0 0 26px rgba(227,73,31,.55))
-        drop-shadow(0 0 55px rgba(170,15,10,.4))
-        contrast(1.1) saturate(1.12);
-    }
-    50%{
-      filter:
-        drop-shadow(0 0 4px rgba(0,0,0,.6))
-        drop-shadow(0 0 38px rgba(227,73,31,.75))
-        drop-shadow(0 0 80px rgba(170,15,10,.55))
-        contrast(1.16) saturate(1.2);
-    }
+    0%,100%{ filter:drop-shadow(0 0 16px rgba(227,73,31,.6)); }
+    50%{ filter:drop-shadow(0 0 28px rgba(227,73,31,.85)); }
   }
   .logo-drip{
     position:absolute; left:0; right:0; bottom:-1px; width:100%; height:18px;
@@ -257,31 +241,38 @@
   .trust-item svg{ width:14px; height:14px; color:var(--ember-bright); flex:0 0 auto; }
   .trust-sep{ width:1px; height:13px; background:rgba(255,255,255,.3); }
 
-  /* ---------- novelty: photo floats free beside a big headline (no frame) ---------- */
+  /* ---------- novelty: huge un-framed photo beside a vertical headline ---------- */
   .novelty-feature{
-    display:flex; align-items:center; justify-content:center; gap:1.1rem;
+    display:flex; align-items:center; justify-content:center; gap:.4rem;
     background:none; border:none; padding:0; cursor:pointer;
-    width:100%; max-width:520px; margin:0 auto;
+    width:100%;
+  }
+  .novelty-headline-wrap{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:center;
+    width:2.6rem;
   }
   .novelty-headline{
-    flex:1; text-align:right;
-    font-family:var(--ff-display); font-weight:800; line-height:.9;
-    font-size:clamp(1.5rem, 6.5vw, 2.7rem); color:#fff;
-    text-shadow:0 4px 0 rgba(0,0,0,.45), 0 0 34px rgba(0,0,0,.65);
+    display:inline-block; white-space:nowrap;
+    transform:rotate(-180deg);
+    writing-mode:vertical-rl;
+    font-family:var(--ff-display); font-weight:800;
+    letter-spacing:.1em;
+    font-size:clamp(1.1rem, 3.6vw, 1.7rem); color:#fff;
+    text-shadow:0 4px 0 rgba(0,0,0,.45), 0 0 28px rgba(0,0,0,.7);
   }
   .novelty-feature-img{
     flex:0 0 auto;
-    width:clamp(96px, 24vw, 156px);
-    height:clamp(96px, 24vw, 156px);
+    width:clamp(170px, 42vw, 260px);
+    height:clamp(170px, 42vw, 260px);
     border-radius:50%; object-fit:cover;
-    box-shadow:0 16px 30px rgba(0,0,0,.55);
+    box-shadow:0 20px 40px rgba(0,0,0,.55);
     transition:transform .3s ease;
   }
-  .novelty-feature:hover .novelty-feature-img{ transform:scale(1.05); }
+  .novelty-feature:hover .novelty-feature-img{ transform:scale(1.04); }
   .novelty-feature-name{
-    display:block; margin-top:.5rem;
+    display:block; margin-top:.6rem;
     font-family:var(--ff-body); font-weight:600;
-    font-size:.82rem; color:rgba(255,255,255,.85);
+    font-size:.85rem; color:rgba(255,255,255,.85);
     text-shadow:0 2px 10px rgba(0,0,0,.75);
   }
 
@@ -584,6 +575,22 @@
     display:flex; flex-direction:column; align-items:center; gap:1rem;
     text-align:center;
   }
+  .subscribe-block{
+    display:flex; flex-direction:column; align-items:center; gap:.8rem;
+  }
+  .subscribe-cta{
+    display:inline-flex; align-items:center; gap:.55rem;
+    font-family:var(--ff-body); font-weight:700; font-size:.92rem;
+    color:var(--ember-bright); background:transparent;
+    border:1.5px dashed var(--ember); border-radius:999px;
+    padding:.8rem 1.6rem; cursor:pointer;
+    transition:background .25s, color .25s, border-style .25s;
+  }
+  .subscribe-cta svg{ width:18px; height:18px; flex:0 0 auto; }
+  .subscribe-cta:hover{ background:rgba(227,73,31,.12); border-style:solid; }
+  .subscribe-cta.is-subscribed{ border-style:solid; color:var(--bone); }
+  .cta-divider{ width:100%; max-width:200px; height:1px; background:var(--line); margin:.5rem 0; }
+
   .cta-eyebrow{ font-family:var(--ff-mono); font-size:.72rem; letter-spacing:.2em; color:var(--fog); text-transform:uppercase; }
   .cta-stamp{
     font-family:var(--ff-display); font-weight:700; font-size:1.05rem;
@@ -684,10 +691,8 @@
     .hero-trust{ gap:.5rem .7rem; font-size:.56rem; }
     .trust-item svg{ width:13px; height:13px; }
     .trust-sep{ height:11px; }
-    .novelty-feature{ flex-direction:column; gap:.5rem; }
-    .novelty-headline{ text-align:center; }
-    .novelty-feature-img{ width:90px; height:90px; }
-    .novelty-feature-name{ font-size:.85rem; }
+    .novelty-feature-img{ width:130px; height:130px; }
+    .novelty-feature-name{ font-size:.78rem; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
     .ticker-card{ height:185px; }
@@ -815,6 +820,10 @@
       <path d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
       <path d="M12 9l1.4 2.6L16 13l-2.6 1.4L12 17l-1.4-2.6L8 13l2.6-1.4Z"/>
     </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 10.5a6 6 0 0 1 12 0c0 3.2 1 4.7 2 5.8H4c1-1.1 2-2.6 2-5.8Z"/>
+      <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -914,6 +923,16 @@
     </section>
 
     <section class="cta-band">
+      <div class="subscribe-block">
+        <span class="cta-eyebrow">No te pierdas nada</span>
+        <button type="button" class="subscribe-cta" id="openSubscribe">
+          <svg viewBox="0 0 24 24"><use href="#i-bell"/></svg>
+          <span id="subscribeCtaLabel">Suscribite a las novedades</span>
+        </button>
+      </div>
+
+      <div class="cta-divider"></div>
+
       <span class="cta-eyebrow">¿Buscás algo más?</span>
       <button type="button" class="cta-stamp" id="goCatalog">Ver todos los productos</button>
     </section>
@@ -1034,6 +1053,41 @@
   </div>
 </div>
 
+<!-- ============ SUBSCRIBE MODAL ============ -->
+<div class="modal-overlay" id="subscribeOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="subscribeTitle">
+    <button type="button" class="modal-close" id="closeSubscribeModal" aria-label="Cerrar">✕</button>
+
+    <div id="subscribeForm">
+      <span class="eyebrow">100% gratis</span>
+      <h2 id="subscribeTitle">No te pierdas ni un susto 👻</h2>
+      <p class="account-note" style="margin-top:0; font-size:.78rem;">
+        Sumate y te avisamos apenas suba un producto nuevo o reingrese stock de algo que se agotó —
+        antes que el resto. Sin spam, sin compromiso, y te podés dar de baja cuando quieras
+        (como una suscripción de YouTube, pero con menos gritos y más calaveras).
+      </p>
+      <div class="modal-field">
+        <label for="subscribeEmail">Tu email</label>
+        <input type="email" id="subscribeEmail" placeholder="tu@email.com">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="cta-stamp" id="subscribeSubmit" style="width:100%;">Suscribirme</button>
+      </div>
+    </div>
+
+    <div id="subscribeDone" hidden>
+      <h2>¡Listo! 🎉</h2>
+      <p class="account-note" style="margin-top:0;">
+        Te vamos a avisar a <strong id="subscribedEmailLabel" style="color:var(--ember-bright);"></strong>
+        apenas haya novedades o reingresos.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="cta-stamp" id="closeSubscribeDone" style="width:100%;">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ============ CART MODAL ============ -->
 <div class="modal-overlay" id="cartOverlay">
   <div class="modal modal-cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
@@ -1066,7 +1120,9 @@
     user: null,                // {email} | null
     pendingCheckout: false,
     catalogFilter: 'todos',
-    catalogQuery: ''
+    catalogQuery: '',
+    subscribed: false,
+    subscribedEmail: null
   };
   const USD_RATE = 1000; // placeholder exchange rate ARS -> USD, replace with a real rate later
 
@@ -1614,6 +1670,53 @@
   });
 
   /* =========================================================
+     SUBSCRIBE TO NOTIFICATIONS (new arrivals / restocks)
+  ========================================================= */
+  const subscribeOverlay = document.getElementById('subscribeOverlay');
+  const subscribeForm = document.getElementById('subscribeForm');
+  const subscribeDone = document.getElementById('subscribeDone');
+
+  function updateSubscribeButton(){
+    const btn = document.getElementById('openSubscribe');
+    const label = document.getElementById('subscribeCtaLabel');
+    btn.classList.toggle('is-subscribed', state.subscribed);
+    label.textContent = state.subscribed ? '¡Ya estás suscripto!' : 'Suscribite a las novedades';
+  }
+
+  document.getElementById('openSubscribe').addEventListener('click', () => {
+    if(state.subscribed){
+      document.getElementById('subscribedEmailLabel').textContent = state.subscribedEmail;
+      subscribeForm.hidden = true;
+      subscribeDone.hidden = false;
+    } else {
+      subscribeForm.hidden = false;
+      subscribeDone.hidden = true;
+    }
+    subscribeOverlay.classList.add('is-open');
+  });
+  document.getElementById('closeSubscribeModal').addEventListener('click', () => subscribeOverlay.classList.remove('is-open'));
+  document.getElementById('closeSubscribeDone').addEventListener('click', () => subscribeOverlay.classList.remove('is-open'));
+  subscribeOverlay.addEventListener('click', (e) => { if(e.target === subscribeOverlay) subscribeOverlay.classList.remove('is-open'); });
+
+  document.getElementById('subscribeSubmit').addEventListener('click', () => {
+    const email = document.getElementById('subscribeEmail').value.trim();
+    if(!email || !email.includes('@')){
+      showToast('Ingresá un email válido');
+      return;
+    }
+    state.subscribed = true;
+    state.subscribedEmail = email;
+    updateSubscribeButton();
+    document.getElementById('subscribedEmailLabel').textContent = email;
+    subscribeForm.hidden = true;
+    subscribeDone.hidden = false;
+    showToast('¡Listo! Te vamos a avisar de las novedades 👻');
+  });
+  document.getElementById('subscribeEmail').addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') document.getElementById('subscribeSubmit').click();
+  });
+
+  /* =========================================================
      SHIPPING / COUNTRY MODAL (sets currency)
   ========================================================= */
   (function(){
@@ -1724,7 +1827,7 @@
       return `
         <div class="offer-slide">
           <button type="button" class="novelty-feature" data-cat="${p.cat}">
-            <span class="novelty-headline">${headline}</span>
+            <span class="novelty-headline-wrap"><span class="novelty-headline">${headline}</span></span>
             ${imgHTML}
           </button>
           <span class="novelty-feature-name">${p.name}</span>
@@ -1834,6 +1937,7 @@
   renderCatalog();
   updateCartBadge();
   updateAccountButton();
+  updateSubscribeButton();
   syncTopbarHeight();
 </script>
 
