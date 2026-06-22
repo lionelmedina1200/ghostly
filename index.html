@@ -92,6 +92,7 @@
   .action-btn.is-active{ border-color:var(--ember-bright); color:var(--ember-bright); }
   .action-btn svg{ width:20px; height:20px; color:var(--ember); flex:0 0 auto; }
   .action-btn span{ font-family:var(--ff-body); font-weight:500; font-size:.82rem; }
+  .btn-label-short{ display:none; }
   .action-btn .count-badge{
     font-family:var(--ff-mono); font-size:.66rem; background:var(--ember); color:var(--void);
     border-radius:999px; padding:.08rem .4rem; line-height:1.3;
@@ -510,8 +511,9 @@
   }
   @media (max-width:680px){
     .topbar-logo span{ display:none; }
-    .action-btn span:not(.count-badge){ display:none; }
-    .action-btn{ padding:.6rem; }
+    .btn-label-full{ display:none; }
+    .btn-label-short{ display:inline; }
+    .action-btn{ padding:.55rem .75rem; }
     .hero{ height:30vh; min-height:220px; max-height:300px; }
     .wordmark{ font-size:1.6rem; }
     .hero-tagline{ font-size:.68rem; }
@@ -639,7 +641,8 @@
     <div class="topbar-actions">
       <button class="action-btn" id="btnAccount" aria-label="Iniciar sesión">
         <svg viewBox="0 0 24 24"><use href="#i-user"/></svg>
-        <span id="accountBtnLabel">Iniciar sesión</span>
+        <span class="btn-label-full" id="accountBtnLabelFull">Iniciar sesión</span>
+        <span class="btn-label-short" id="accountBtnLabelShort">Cuenta</span>
       </button>
       <button class="action-btn" id="btnCart" aria-label="Carrito">
         <svg viewBox="0 0 24 24"><use href="#i-cart"/></svg>
@@ -810,6 +813,7 @@
       </div>
       <div class="divider">o</div>
       <div class="google-btn-slot" id="googleButtonContainer"></div>
+      <p class="account-note">Demo: cualquier email y contraseña inician sesión (eso todavía es simulado). El botón de Google sí es real — autentica de verdad contra tu cuenta de Google.</p>
     </div>
 
     <div id="accountLoggedIn" class="account-loggedin" hidden>
@@ -1249,13 +1253,17 @@
 
   function updateAccountButton(){
     const btn = document.getElementById('btnAccount');
-    const label = document.getElementById('accountBtnLabel');
+    const labelFull = document.getElementById('accountBtnLabelFull');
+    const labelShort = document.getElementById('accountBtnLabelShort');
     if(state.user){
       btn.classList.add('is-active');
-      label.textContent = state.user.email.split('@')[0];
+      const name = state.user.email.split('@')[0];
+      labelFull.textContent = name;
+      labelShort.textContent = name;
     } else {
       btn.classList.remove('is-active');
-      label.textContent = 'Iniciar sesión';
+      labelFull.textContent = 'Iniciar sesión';
+      labelShort.textContent = 'Cuenta';
     }
   }
 
