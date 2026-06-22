@@ -103,9 +103,7 @@
   /* ---------- hero ---------- */
   .hero{
     position:relative;
-    height:40vh;
-    min-height:300px;
-    max-height:440px;
+    padding:3rem 1.25rem 2.8rem;
     overflow:hidden;
     display:flex;
     align-items:center;
@@ -136,24 +134,119 @@
   .slide[data-slide="3"] .slide-motif{ width:200px; top:10%; left:10%; }
   .slide[data-slide="4"] .slide-motif{ width:260px; bottom:0; right:4%; }
 
-  .hero-content{ position:relative; z-index:2; text-align:center; padding:0 1.5rem; }
-  .logo-mark{ display:flex; align-items:center; justify-content:center; gap:.6rem; }
-  .logo-mark svg{ width:34px; height:34px; color:var(--ember-bright); }
-  .wordmark{
-    font-family:var(--ff-display);
-    font-weight:700;
-    font-size:clamp(1.8rem, 5vw, 3.2rem);
-    letter-spacing:.01em;
-    color:var(--bone);
-    text-shadow:0 0 28px rgba(227,73,31,0.35);
+  .hero-content{ position:relative; z-index:2; text-align:center; padding:0 1rem; max-width:640px; margin:0 auto; }
+
+  .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:.7rem; }
+  .hero-logo{
+    width:min(380px, 72vw);
+    display:block; margin:0 auto;
+    filter:
+      drop-shadow(0 0 4px rgba(0,0,0,.6))
+      drop-shadow(0 0 26px rgba(227,73,31,.55))
+      drop-shadow(0 0 55px rgba(170,15,10,.4))
+      contrast(1.1) saturate(1.12);
   }
-  .hero-tagline{
-    margin:.6rem 0 0;
-    font-family:var(--ff-mono);
-    font-size:.78rem;
-    letter-spacing:.28em;
-    text-transform:uppercase;
-    color:var(--bone-dim);
+  @media (prefers-reduced-motion:no-preference){
+    .hero-logo{ animation:eerie-glow 4.5s ease-in-out infinite; }
+  }
+  @keyframes eerie-glow{
+    0%,100%{
+      filter:
+        drop-shadow(0 0 4px rgba(0,0,0,.6))
+        drop-shadow(0 0 26px rgba(227,73,31,.55))
+        drop-shadow(0 0 55px rgba(170,15,10,.4))
+        contrast(1.1) saturate(1.12);
+    }
+    50%{
+      filter:
+        drop-shadow(0 0 4px rgba(0,0,0,.6))
+        drop-shadow(0 0 38px rgba(227,73,31,.75))
+        drop-shadow(0 0 80px rgba(170,15,10,.55))
+        contrast(1.16) saturate(1.2);
+    }
+  }
+  .logo-drip{
+    position:absolute; left:0; right:0; bottom:-2px; width:100%; height:34px;
+    fill:#7d0f0f; opacity:.85; pointer-events:none;
+  }
+
+  .hero-claim{
+    margin:.2rem 0 1.2rem;
+    font-family:var(--ff-display); font-weight:500;
+    font-size:clamp(.95rem, 2.4vw, 1.25rem);
+    color:var(--bone-dim); line-height:1.4;
+  }
+
+  .hero-offer{ display:flex; align-items:baseline; justify-content:center; gap:.5rem; margin-bottom:1.3rem; }
+  .hero-offer-pct{
+    font-family:var(--ff-display); font-weight:800;
+    font-size:clamp(3.2rem, 9vw, 5.6rem); line-height:.9;
+    color:var(--bone); text-shadow:0 0 30px rgba(0,0,0,.6);
+  }
+  .hero-offer-off{
+    font-family:var(--ff-display); font-weight:800;
+    font-size:clamp(2.1rem, 6vw, 3.6rem); line-height:.9;
+    color:#d61f1f; text-shadow:0 0 24px rgba(214,31,31,.55);
+  }
+
+  .hero-pay-tags{ display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem; margin-bottom:1.4rem; }
+  .pay-tag{
+    display:inline-flex; align-items:center; gap:.5rem;
+    border:1px solid var(--ember-deep); border-radius:6px;
+    padding:.6rem .95rem; background:rgba(0,0,0,.3);
+    font-family:var(--ff-body); font-size:.78rem; color:var(--bone-dim);
+  }
+  .pay-tag svg{ width:16px; height:16px; color:var(--ember); flex:0 0 auto; }
+
+  .hero-trust{
+    display:flex; align-items:center; justify-content:center;
+    gap:1rem; flex-wrap:wrap;
+    font-family:var(--ff-mono); font-size:.66rem; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--bone-dim);
+  }
+  .trust-item{ display:inline-flex; align-items:center; gap:.4rem; }
+  .trust-item svg{ width:15px; height:15px; color:var(--ember); flex:0 0 auto; }
+  .trust-sep{ width:1px; height:14px; background:var(--line); }
+
+  /* ---------- promo strip (auto-rotating banner #2) ---------- */
+  .promo-strip{
+    position:relative;
+    background:var(--charcoal);
+    border-bottom:1px solid var(--line);
+    padding:2.2rem 1.25rem;
+    overflow:hidden;
+  }
+  .promo-track{ position:relative; max-width:640px; margin:0 auto; text-align:center; }
+  .promo-slide{ }
+  .promo-track.has-multiple .promo-slide{
+    position:absolute; inset:0; opacity:0;
+    transition:opacity 1.2s ease;
+  }
+  .promo-track.has-multiple .promo-slide.is-active{ position:relative; opacity:1; }
+  .promo-eyebrow{
+    font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ember); display:block; margin-bottom:.5rem;
+  }
+  .promo-eyebrow::after{
+    content:""; display:block; width:34px; height:2px;
+    background:var(--ember-bright); margin:.5rem auto 0;
+  }
+  .promo-big{
+    display:flex; align-items:baseline; justify-content:center; gap:.5rem;
+    flex-wrap:wrap; margin-bottom:.5rem;
+  }
+  .promo-big-num{
+    font-family:var(--ff-display); font-weight:800;
+    font-size:clamp(2.6rem, 7vw, 4.2rem); line-height:.9; color:var(--bone);
+  }
+  .promo-big-text{
+    font-family:var(--ff-display); font-weight:800;
+    font-size:clamp(1.5rem, 4vw, 2.4rem); line-height:1.05;
+  }
+  .promo-big-text.is-white{ color:var(--bone); }
+  .promo-big-text.is-red{ color:#d61f1f; }
+  .promo-sub{
+    font-family:var(--ff-body); font-size:.85rem; color:var(--bone-dim); margin-bottom:1.3rem;
   }
   .glitch{ color:var(--ember-bright); position:relative; }
   @media (prefers-reduced-motion:no-preference){
@@ -529,9 +622,11 @@
       position:absolute; top:2px; right:4px;
       font-size:.56rem; padding:.04rem .32rem;
     }
-    .hero{ height:30vh; min-height:220px; max-height:300px; }
-    .wordmark{ font-size:1.6rem; }
-    .hero-tagline{ font-size:.68rem; }
+    .hero{ padding:2.4rem 1rem 2.2rem; }
+    .hero-claim{ font-size:.85rem; }
+    .hero-pay-tags{ flex-direction:column; align-items:center; }
+    .hero-trust{ gap:.6rem; }
+    .promo-strip{ padding:1.8rem 1rem; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
     .ticker-card{ height:185px; }
@@ -637,6 +732,21 @@
       <path d="M6.5 7 7.6 19.5a1 1 0 0 0 1 .9h6.8a1 1 0 0 0 1-.9L17.5 7"/>
       <path d="M10 11v6"/><path d="M14 11v6"/>
     </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5.5" y="11" width="13" height="9" rx="1.6"/>
+      <path d="M8.2 11V7.8a3.8 3.8 0 0 1 7.6 0V11"/>
+    </symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="8.5" width="11" height="7.5" rx="1"/>
+      <path d="M13 11h3.6L20 14.2V16h-2"/>
+      <circle cx="7" cy="18" r="1.7"/><circle cx="16.4" cy="18" r="1.7"/>
+      <path d="M4.5 18h1M18 18h1"/>
+    </symbol>
+    <symbol id="i-cash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="7" width="18" height="11" rx="1.6"/>
+      <circle cx="12" cy="12.5" r="2.5"/>
+      <path d="M6.5 7v0M17.5 18v0"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -678,12 +788,39 @@
     <div class="slide" data-slide="4"><svg class="slide-motif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><use href="#i-web"/></svg></div>
 
     <div class="hero-content">
-      <div class="logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#i-skull"/></svg>
-        <span class="wordmark">GHOSTLY</span>
+      <div class="hero-logo-wrap">
+        <img class="hero-logo" src="images/logo-ghostly.png" alt="Ghostly - Always Halloween">
+        <svg class="logo-drip" viewBox="0 0 300 60" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M40,2 C40,18 36,22 36,34 C36,40 44,40 44,34 C44,26 40,22 40,2 Z"/>
+          <path d="M122,2 C122,14 117,18 117,28 C117,33 125,33 125,28 C125,20 122,16 122,2 Z"/>
+          <path d="M208,2 C208,20 202,26 202,40 C202,47 212,47 212,40 C212,30 208,24 208,2 Z"/>
+          <path d="M260,2 C260,12 256,15 256,22 C256,26 263,26 263,22 C263,17 260,14 260,2 Z"/>
+        </svg>
       </div>
-      <p class="hero-tagline">siempre <span class="glitch">halloween</span></p>
+      <p class="hero-claim">No es solo una marca, es una <span class="glitch">declaración</span></p>
+
+      <div class="hero-offer">
+        <span class="hero-offer-pct">10%</span>
+        <span class="hero-offer-off">OFF</span>
+      </div>
+
+      <div class="hero-pay-tags">
+        <span class="pay-tag"><svg viewBox="0 0 24 24"><use href="#i-cash"/></svg>con transferencia</span>
+        <span class="pay-tag"><svg viewBox="0 0 24 24"><use href="#i-card"/></svg>hasta 2 cuotas sin interés con tarjeta</span>
+      </div>
+
+      <div class="hero-trust">
+        <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Compra segura</span>
+        <span class="trust-sep"></span>
+        <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg>Envíos a todo el país</span>
+        <span class="trust-sep"></span>
+        <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>Atención personalizada</span>
+      </div>
     </div>
+  </section>
+
+  <section class="promo-strip" aria-label="Promociones">
+    <div class="promo-track" id="promoTrack"></div>
   </section>
 
   <nav class="ticker" aria-label="Categorías">
@@ -1405,6 +1542,63 @@
   document.getElementById('logoHome').addEventListener('click', () => showView('home'));
 
   /* =========================================================
+     PROMO STRIP (banner #2 — auto-rotates every 5s)
+  ========================================================= */
+  const TRUST_ROW_HTML = `
+    <div class="hero-trust">
+      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Compra segura</span>
+      <span class="trust-sep"></span>
+      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg>Envíos a todo el país</span>
+      <span class="trust-sep"></span>
+      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>Atención personalizada</span>
+    </div>`;
+
+  const PROMO_SLIDES = [
+    {
+      eyebrow: "Activamos",
+      bigNum: "2",
+      bigText: [ {text:"CUOTAS", cls:"is-white"}, {text:"SIN INTERÉS", cls:"is-red"} ],
+      sub: "con tarjeta de crédito"
+    }
+    // Agregá más objetos acá (mismo formato) y van a rotar solas cada 5s.
+  ];
+
+  function promoSlideHTML(slide){
+    const bigText = slide.bigText.map(t => `<span class="promo-big-text ${t.cls}">${t.text}</span>`).join('');
+    return `
+      <div class="promo-slide">
+        <span class="promo-eyebrow">${slide.eyebrow}</span>
+        <div class="promo-big">
+          <span class="promo-big-num">${slide.bigNum}</span>
+          ${bigText}
+        </div>
+        <p class="promo-sub">${slide.sub}</p>
+        ${TRUST_ROW_HTML}
+      </div>`;
+  }
+
+  function renderPromoStrip(){
+    const track = document.getElementById('promoTrack');
+    track.innerHTML = PROMO_SLIDES.map(promoSlideHTML).join('');
+    if(PROMO_SLIDES.length > 1){
+      track.classList.add('has-multiple');
+      const slides = track.querySelectorAll('.promo-slide');
+      slides[0].classList.add('is-active');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!reduce){
+        let idx = 0;
+        setInterval(() => {
+          slides[idx].classList.remove('is-active');
+          idx = (idx + 1) % slides.length;
+          slides[idx].classList.add('is-active');
+        }, 5000);
+      } else {
+        slides.forEach(s => s.classList.add('is-active'));
+      }
+    }
+  }
+
+  /* =========================================================
      HERO CROSSFADE
   ========================================================= */
   (function(){
@@ -1423,6 +1617,7 @@
      INIT
   ========================================================= */
   renderTicker();
+  renderPromoStrip();
   renderFilters();
   renderHomeRows();
   renderCatalog();
