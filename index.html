@@ -105,13 +105,16 @@
 
   /* ---------- hero ---------- */
   .hero{
-    position:relative;
-    padding:3.5rem 1.25rem 3rem;
+    position:sticky;
+    top:var(--topbar-h, 64px);
+    z-index:30;
+    padding:1.5rem 1.25rem 1.4rem;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
     border-bottom:1px solid var(--line);
+    box-shadow:0 14px 26px rgba(0,0,0,.4);
     background-image:url('images/hero-bg.jpg');
     background-size:cover;
     background-position:center 25%;
@@ -121,12 +124,26 @@
     position:absolute; inset:0;
     background:linear-gradient(180deg, rgba(9,7,8,.45) 0%, rgba(9,7,8,.68) 55%, rgba(9,7,8,.93) 100%);
   }
+  .hero-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:32px; height:32px; border-radius:50%;
+    background:rgba(8,6,7,.55); border:1px solid rgba(255,255,255,.25);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; cursor:pointer; z-index:5;
+    transition:background .2s, border-color .2s;
+    padding:0;
+  }
+  .hero-arrow:hover{ background:rgba(227,73,31,.55); border-color:var(--ember-bright); }
+  .hero-arrow svg{ width:15px; height:15px; }
+  .hero-arrow-left{ left:.5rem; }
+  .hero-arrow-right{ right:.5rem; }
+  .hero-arrow-right svg{ transform:scaleX(-1); }
 
   .hero-content{ position:relative; z-index:2; text-align:center; padding:0 1rem; max-width:640px; margin:0 auto; }
 
-  .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:1rem; }
+  .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:.4rem; }
   .hero-logo{
-    width:min(360px, 68vw);
+    width:min(170px, 34vw);
     display:block; margin:0 auto;
     filter:
       drop-shadow(0 0 4px rgba(0,0,0,.6))
@@ -154,12 +171,12 @@
     }
   }
   .logo-drip{
-    position:absolute; left:0; right:0; bottom:-2px; width:100%; height:34px;
+    position:absolute; left:0; right:0; bottom:-1px; width:100%; height:18px;
     fill:#7d0f0f; opacity:.85; pointer-events:none;
   }
 
-  /* -- alternating offer content (crossfades every 3s) -- */
-  .hero-offer-slides{ position:relative; display:grid; margin-bottom:1.4rem; }
+  /* -- alternating offer content (crossfades, auto + manual via arrows) -- */
+  .hero-offer-slides{ position:relative; display:grid; margin-bottom:.6rem; }
   .offer-slide{
     grid-column:1; grid-row:1;
     display:flex; flex-direction:column; align-items:center;
@@ -167,56 +184,103 @@
   }
   .offer-slide.is-active{ opacity:1; }
   .offer-eyebrow{
-    font-family:var(--ff-mono); font-size:.74rem; letter-spacing:.2em;
-    text-transform:uppercase; color:var(--ember-bright); margin-bottom:.6rem;
+    font-family:var(--ff-mono); font-size:.6rem; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ember-bright); margin-bottom:.3rem;
   }
   .offer-claim{
     font-family:var(--ff-display); font-weight:500;
-    font-size:clamp(1rem, 2.6vw, 1.3rem);
-    color:#fff; line-height:1.4; margin:0 0 .9rem;
+    font-size:clamp(.7rem, 1.6vw, .92rem);
+    color:#fff; line-height:1.35; margin:0 0 .45rem;
     text-shadow:0 2px 14px rgba(0,0,0,.85);
   }
   .offer-big{
     display:flex; align-items:baseline; justify-content:center;
-    gap:.55rem; flex-wrap:wrap; margin-bottom:1.3rem;
+    gap:.35rem; flex-wrap:wrap; margin-bottom:.6rem;
   }
   .offer-big-num{
     font-family:var(--ff-display); font-weight:800;
-    font-size:clamp(4.4rem, 14vw, 8rem); line-height:.82; color:#fff;
-    text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 50px rgba(0,0,0,.75);
+    font-size:clamp(2.2rem, 7vw, 4rem); line-height:.82; color:#fff;
+    text-shadow:0 3px 0 rgba(0,0,0,.5), 0 0 30px rgba(0,0,0,.75);
   }
   .offer-big-word{
     font-family:var(--ff-display); font-weight:800; line-height:.92;
-    font-size:clamp(2.8rem, 9vw, 5rem);
-    text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 40px rgba(0,0,0,.75);
+    font-size:clamp(1.4rem, 4.5vw, 2.5rem);
+    text-shadow:0 3px 0 rgba(0,0,0,.5), 0 0 24px rgba(0,0,0,.75);
   }
   .offer-big-word.is-white{ color:#fff; }
-  .offer-big-word.is-red{ color:#e21f1f; text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 40px rgba(180,10,10,.7); }
+  .offer-big-word.is-red{ color:#e21f1f; text-shadow:0 3px 0 rgba(0,0,0,.5), 0 0 24px rgba(180,10,10,.7); }
 
-  .offer-tags{ display:flex; flex-direction:column; gap:.65rem; width:100%; max-width:460px; margin:0 auto; }
+  .offer-tags{ display:flex; flex-direction:column; gap:.35rem; width:100%; max-width:340px; margin:0 auto; }
   .offer-tag{
-    display:flex; align-items:center; gap:.8rem;
-    background:rgba(8,6,7,.6); border:2px solid var(--ember);
-    border-radius:8px; padding:.85rem 1.15rem;
+    display:flex; align-items:center; gap:.55rem;
+    background:rgba(8,6,7,.6); border:1.5px solid var(--ember);
+    border-radius:7px; padding:.45rem .75rem;
     backdrop-filter:blur(2px);
   }
-  .offer-tag svg{ width:24px; height:24px; color:var(--ember-bright); flex:0 0 auto; }
+  .offer-tag svg{ width:16px; height:16px; color:var(--ember-bright); flex:0 0 auto; }
   .offer-tag span{
-    font-family:var(--ff-body); font-weight:700; font-size:1rem;
-    color:#fff; text-align:left; line-height:1.25;
+    font-family:var(--ff-body); font-weight:700; font-size:.74rem;
+    color:#fff; text-align:left; line-height:1.2;
   }
 
   .hero-trust{
     display:flex; align-items:center; justify-content:center;
-    gap:1.6rem; flex-wrap:wrap;
-    margin-top:.3rem; padding-top:1.2rem;
+    gap:.85rem; flex-wrap:wrap;
+    margin-top:.15rem; padding-top:.55rem;
     border-top:1px solid rgba(255,255,255,.18);
-    font-family:var(--ff-mono); font-size:.92rem; font-weight:700; letter-spacing:.02em;
+    font-family:var(--ff-mono); font-size:.6rem; font-weight:700; letter-spacing:.01em;
     text-transform:uppercase; color:#fff;
   }
-  .trust-item{ display:inline-flex; align-items:center; gap:.55rem; text-shadow:0 2px 10px rgba(0,0,0,.85); }
-  .trust-item svg{ width:21px; height:21px; color:var(--ember-bright); flex:0 0 auto; }
-  .trust-sep{ width:1px; height:20px; background:rgba(255,255,255,.3); }
+  .trust-item{ display:inline-flex; align-items:center; gap:.3rem; text-shadow:0 2px 10px rgba(0,0,0,.85); }
+  .trust-item svg{ width:14px; height:14px; color:var(--ember-bright); flex:0 0 auto; }
+  .trust-sep{ width:1px; height:13px; background:rgba(255,255,255,.3); }
+
+  /* ---------- novelty strip (new arrivals / restocks) ---------- */
+  .novelty-strip{
+    position:relative;
+    background:var(--charcoal);
+    border-bottom:1px solid var(--line);
+    padding:.85rem 3.2rem;
+    display:flex; align-items:center; justify-content:center;
+    min-height:58px;
+  }
+  .novelty-strip[hidden]{ display:none; }
+  .novelty-slides{ position:relative; display:grid; width:100%; max-width:640px; }
+  .novelty-slide{
+    grid-column:1; grid-row:1;
+    display:flex; align-items:center; justify-content:center;
+    gap:.7rem; flex-wrap:wrap;
+    opacity:0; transition:opacity .8s ease;
+    text-align:center;
+  }
+  .novelty-slide.is-active{ opacity:1; }
+  .novelty-tag{
+    font-family:var(--ff-mono); font-size:.62rem; font-weight:700; letter-spacing:.08em;
+    text-transform:uppercase; padding:.25rem .55rem; border-radius:4px; flex:0 0 auto;
+  }
+  .novelty-tag.is-new{ background:rgba(227,73,31,.18); color:var(--ember-bright); border:1px solid var(--ember); }
+  .novelty-tag.is-restock{ background:rgba(255,255,255,.08); color:var(--bone-dim); border:1px solid var(--line); }
+  .novelty-slide svg.novelty-icon{ width:18px; height:18px; color:var(--ember); flex:0 0 auto; }
+  .novelty-name{ font-family:var(--ff-body); font-weight:700; font-size:.88rem; color:var(--bone); }
+  .novelty-note{ font-family:var(--ff-body); font-size:.8rem; color:var(--fog); }
+  .novelty-link{
+    font-family:var(--ff-mono); font-size:.68rem; letter-spacing:.04em;
+    color:var(--ember-bright); text-decoration:underline; cursor:pointer;
+    background:none; border:none; padding:0; flex:0 0 auto;
+  }
+  .novelty-link:hover{ color:#fff; }
+  .novelty-arrow{
+    width:28px; height:28px; border-radius:50%; flex:0 0 auto;
+    background:var(--charcoal-soft); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--bone-dim); cursor:pointer; padding:0;
+    transition:border-color .2s, color .2s;
+  }
+  .novelty-arrow:hover{ border-color:var(--ember); color:var(--ember-bright); }
+  .novelty-arrow svg{ width:13px; height:13px; }
+  .novelty-arrow-left{ position:absolute; left:1rem; }
+  .novelty-arrow-right{ position:absolute; right:1rem; }
+  .novelty-arrow-right svg{ transform:scaleX(-1); }
 
   .glitch{ color:var(--ember-bright); position:relative; }
   @media (prefers-reduced-motion:no-preference){
@@ -605,13 +669,26 @@
       position:absolute; top:-4px; right:-4px;
       font-size:.56rem; padding:.04rem .32rem;
     }
-    .hero{ padding:2.6rem 1rem 2.3rem; }
-    .offer-claim{ font-size:.88rem; }
-    .offer-tag{ padding:.7rem .9rem; }
-    .offer-tag span{ font-size:.88rem; }
-    .hero-trust{ gap:.7rem 1rem; font-size:.66rem; }
-    .trust-item svg{ width:16px; height:16px; }
-    .trust-sep{ height:14px; }
+    .hero{ padding:1.1rem .85rem 1rem; }
+    .hero-content{ padding:0 1.7rem; }
+    .hero-arrow{ width:26px; height:26px; }
+    .hero-arrow svg{ width:13px; height:13px; }
+    .hero-arrow-left{ left:.25rem; }
+    .hero-arrow-right{ right:.25rem; }
+    .offer-claim{ font-size:.68rem; }
+    .offer-tag{ padding:.4rem .6rem; }
+    .offer-tag span{ font-size:.7rem; }
+    .hero-trust{ gap:.5rem .7rem; font-size:.56rem; }
+    .trust-item svg{ width:13px; height:13px; }
+    .trust-sep{ height:11px; }
+    .novelty-strip{ padding:.7rem 2.4rem; min-height:50px; }
+    .novelty-slide{ gap:.45rem; }
+    .novelty-name{ font-size:.78rem; }
+    .novelty-note{ display:none; }
+    .novelty-arrow{ width:24px; height:24px; }
+    .novelty-arrow svg{ width:11px; height:11px; }
+    .novelty-arrow-left{ left:.4rem; }
+    .novelty-arrow-right{ right:.4rem; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
     .ticker-card{ height:185px; }
@@ -732,6 +809,13 @@
       <circle cx="12" cy="12.5" r="2.5"/>
       <path d="M6.5 7v0M17.5 18v0"/>
     </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 6 9 12l6 6"/>
+    </symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4"/>
+      <path d="M12 9l1.4 2.6L16 13l-2.6 1.4L12 17l-1.4-2.6L8 13l2.6-1.4Z"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -767,6 +851,9 @@
 <section class="view" id="view-home">
 
   <section class="hero">
+    <button type="button" class="hero-arrow hero-arrow-left" id="heroPrev" aria-label="Oferta anterior">
+      <svg viewBox="0 0 24 24"><use href="#i-chevron"/></svg>
+    </button>
     <div class="hero-content">
       <div class="hero-logo-wrap">
         <img class="hero-logo" src="images/logo-ghostly.png" alt="Ghostly - Always Halloween">
@@ -788,6 +875,19 @@
         <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>Atención personalizada</span>
       </div>
     </div>
+    <button type="button" class="hero-arrow hero-arrow-right" id="heroNext" aria-label="Siguiente oferta">
+      <svg viewBox="0 0 24 24"><use href="#i-chevron"/></svg>
+    </button>
+  </section>
+
+  <section class="novelty-strip" aria-label="Novedades">
+    <button type="button" class="novelty-arrow novelty-arrow-left" id="noveltyPrev" aria-label="Novedad anterior">
+      <svg viewBox="0 0 24 24"><use href="#i-chevron"/></svg>
+    </button>
+    <div class="novelty-slides" id="noveltySlides"></div>
+    <button type="button" class="novelty-arrow novelty-arrow-right" id="noveltyNext" aria-label="Siguiente novedad">
+      <svg viewBox="0 0 24 24"><use href="#i-chevron"/></svg>
+    </button>
   </section>
 
   <nav class="ticker" aria-label="Categorías">
@@ -1636,31 +1736,134 @@
     const wrap = document.getElementById('heroOfferSlides');
     wrap.innerHTML = OFFER_SLIDES.map(offerSlideHTML).join('');
     const slides = wrap.querySelectorAll('.offer-slide');
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
     slides[0].classList.add('is-active');
-    if(slides.length < 2) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce){
-      slides.forEach(s => s.classList.add('is-active'));
+    if(slides.length < 2){
+      prevBtn.hidden = true;
+      nextBtn.hidden = true;
       return;
     }
     let idx = 0;
-    setInterval(() => {
+    let timer = null;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function show(newIdx){
       slides[idx].classList.remove('is-active');
-      idx = (idx + 1) % slides.length;
+      idx = (newIdx + slides.length) % slides.length;
       slides[idx].classList.add('is-active');
-    }, 5000);
+    }
+    function startAuto(){
+      if(reduce) return;
+      clearInterval(timer);
+      timer = setInterval(() => show(idx + 1), 5000);
+    }
+    function manualGo(step){
+      show(idx + step);
+      startAuto(); // manual interaction just resets the automatic timer, doesn't stop it
+    }
+
+    prevBtn.addEventListener('click', () => manualGo(-1));
+    nextBtn.addEventListener('click', () => manualGo(1));
+    startAuto();
   }
+
+  /* =========================================================
+     NOVELTY STRIP (new arrivals / restocks — auto + manual arrows)
+  ========================================================= */
+  // Cuando agregues un producto nuevo o reponas stock, sumalo acá y
+  // aparece solo en esta franja (rota automático cada 4.5s, y también
+  // se puede pasar a mano con las flechas).
+  const NOVELTY_SLIDES = [
+    { kind:"new",     productId:"p20", note:"Recién llegado a la tienda" },
+    { kind:"restock", productId:"p4",  note:"Volvió a haber stock" },
+    { kind:"new",     productId:"p14", note:"Recién llegado a la tienda" }
+  ];
+
+  function noveltySlideHTML(slide){
+    const p = PRODUCTS_BY_ID[slide.productId];
+    if(!p) return '';
+    const icon = ICONS[p.cat] || "i-frame";
+    const isNew = slide.kind === "new";
+    const tagLabel = isNew ? "Nuevo" : "Reposición";
+    const tagCls = isNew ? "is-new" : "is-restock";
+    return `
+      <div class="novelty-slide">
+        <span class="novelty-tag ${tagCls}">${tagLabel}</span>
+        <svg class="novelty-icon" viewBox="0 0 24 24"><use href="#${icon}"/></svg>
+        <span class="novelty-name">${p.name}</span>
+        <span class="novelty-note">— ${slide.note}</span>
+        <button type="button" class="novelty-link" data-cat="${p.cat}">Ver producto</button>
+      </div>`;
+  }
+
+  function renderNoveltyStrip(){
+    const wrap = document.getElementById('noveltySlides');
+    const prevBtn = document.getElementById('noveltyPrev');
+    const nextBtn = document.getElementById('noveltyNext');
+    const validSlides = NOVELTY_SLIDES.filter(s => PRODUCTS_BY_ID[s.productId]);
+    if(validSlides.length === 0){
+      document.querySelector('.novelty-strip').hidden = true;
+      return;
+    }
+    wrap.innerHTML = validSlides.map(noveltySlideHTML).join('');
+    const slides = wrap.querySelectorAll('.novelty-slide');
+    slides[0].classList.add('is-active');
+
+    wrap.querySelectorAll('.novelty-link').forEach(btn => {
+      btn.addEventListener('click', () => showView('catalog', {cat:btn.dataset.cat, query:''}));
+    });
+
+    if(slides.length < 2){
+      prevBtn.hidden = true;
+      nextBtn.hidden = true;
+      return;
+    }
+    let idx = 0;
+    let timer = null;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function show(newIdx){
+      slides[idx].classList.remove('is-active');
+      idx = (newIdx + slides.length) % slides.length;
+      slides[idx].classList.add('is-active');
+    }
+    function startAuto(){
+      if(reduce) return;
+      clearInterval(timer);
+      timer = setInterval(() => show(idx + 1), 4500);
+    }
+    function manualGo(step){
+      show(idx + step);
+      startAuto();
+    }
+
+    prevBtn.addEventListener('click', () => manualGo(-1));
+    nextBtn.addEventListener('click', () => manualGo(1));
+    startAuto();
+  }
+
+  /* =========================================================
+     TOPBAR HEIGHT (keeps the sticky hero docked right below it)
+  ========================================================= */
+  function syncTopbarHeight(){
+    const topbar = document.querySelector('.topbar');
+    if(topbar) document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
+  }
+  window.addEventListener('resize', syncTopbarHeight);
 
   /* =========================================================
      INIT
   ========================================================= */
   renderTicker();
   renderHeroOfferSlides();
+  renderNoveltyStrip();
   renderFilters();
   renderHomeRows();
   renderCatalog();
   updateCartBadge();
   updateAccountButton();
+  syncTopbarHeight();
 </script>
 
 </body>
