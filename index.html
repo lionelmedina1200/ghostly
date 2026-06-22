@@ -103,42 +103,27 @@
   /* ---------- hero ---------- */
   .hero{
     position:relative;
-    padding:3rem 1.25rem 2.8rem;
+    padding:3.5rem 1.25rem 3rem;
     overflow:hidden;
     display:flex;
     align-items:center;
     justify-content:center;
     border-bottom:1px solid var(--line);
+    background-image:url('images/hero-bg.jpg');
+    background-size:cover;
+    background-position:center 25%;
   }
-  .slide{
-    position:absolute; inset:0;
-    opacity:0;
-    transition:opacity 1.6s ease;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .slide.is-active{ opacity:1; }
-  .slide::before{
+  .hero::before{
     content:"";
     position:absolute; inset:0;
-    background-image:
-      radial-gradient(ellipse at 50% 110%, rgba(0,0,0,0) 0%, var(--void) 78%),
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px);
+    background:linear-gradient(180deg, rgba(9,7,8,.45) 0%, rgba(9,7,8,.68) 55%, rgba(9,7,8,.93) 100%);
   }
-  .slide[data-slide="1"]{ background: radial-gradient(circle at 70% 25%, #3a1a14 0%, var(--void) 60%); }
-  .slide[data-slide="2"]{ background: radial-gradient(circle at 30% 70%, #2c1410 0%, var(--void) 62%); }
-  .slide[data-slide="3"]{ background: radial-gradient(circle at 50% 20%, #34160f 0%, var(--void) 58%); }
-  .slide[data-slide="4"]{ background: radial-gradient(circle at 80% 80%, #2a1310 0%, var(--void) 64%); }
-  .slide-motif{ position:absolute; opacity:.5; color:var(--ember-deep); }
-  .slide[data-slide="1"] .slide-motif{ width:220px; top:8%; right:8%; }
-  .slide[data-slide="2"] .slide-motif{ width:180px; bottom:6%; left:6%; }
-  .slide[data-slide="3"] .slide-motif{ width:200px; top:10%; left:10%; }
-  .slide[data-slide="4"] .slide-motif{ width:260px; bottom:0; right:4%; }
 
   .hero-content{ position:relative; z-index:2; text-align:center; padding:0 1rem; max-width:640px; margin:0 auto; }
 
-  .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:.7rem; }
+  .hero-logo-wrap{ position:relative; display:inline-block; margin-bottom:1rem; }
   .hero-logo{
-    width:min(380px, 72vw);
+    width:min(360px, 68vw);
     display:block; margin:0 auto;
     filter:
       drop-shadow(0 0 4px rgba(0,0,0,.6))
@@ -170,84 +155,64 @@
     fill:#7d0f0f; opacity:.85; pointer-events:none;
   }
 
-  .hero-claim{
-    margin:.2rem 0 1.2rem;
+  /* -- alternating offer content (crossfades every 3s) -- */
+  .hero-offer-slides{ position:relative; display:grid; margin-bottom:1.4rem; }
+  .offer-slide{
+    grid-column:1; grid-row:1;
+    display:flex; flex-direction:column; align-items:center;
+    opacity:0; transition:opacity 1s ease;
+  }
+  .offer-slide.is-active{ opacity:1; }
+  .offer-eyebrow{
+    font-family:var(--ff-mono); font-size:.74rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--ember-bright); margin-bottom:.6rem;
+  }
+  .offer-claim{
     font-family:var(--ff-display); font-weight:500;
-    font-size:clamp(.95rem, 2.4vw, 1.25rem);
-    color:var(--bone-dim); line-height:1.4;
+    font-size:clamp(1rem, 2.6vw, 1.3rem);
+    color:#fff; line-height:1.4; margin:0 0 .9rem;
+    text-shadow:0 2px 14px rgba(0,0,0,.85);
   }
-
-  .hero-offer{ display:flex; align-items:baseline; justify-content:center; gap:.5rem; margin-bottom:1.3rem; }
-  .hero-offer-pct{
+  .offer-big{
+    display:flex; align-items:baseline; justify-content:center;
+    gap:.55rem; flex-wrap:wrap; margin-bottom:1.3rem;
+  }
+  .offer-big-num{
     font-family:var(--ff-display); font-weight:800;
-    font-size:clamp(3.2rem, 9vw, 5.6rem); line-height:.9;
-    color:var(--bone); text-shadow:0 0 30px rgba(0,0,0,.6);
+    font-size:clamp(4.4rem, 14vw, 8rem); line-height:.82; color:#fff;
+    text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 50px rgba(0,0,0,.75);
   }
-  .hero-offer-off{
-    font-family:var(--ff-display); font-weight:800;
-    font-size:clamp(2.1rem, 6vw, 3.6rem); line-height:.9;
-    color:#d61f1f; text-shadow:0 0 24px rgba(214,31,31,.55);
+  .offer-big-word{
+    font-family:var(--ff-display); font-weight:800; line-height:.92;
+    font-size:clamp(2.8rem, 9vw, 5rem);
+    text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 40px rgba(0,0,0,.75);
   }
+  .offer-big-word.is-white{ color:#fff; }
+  .offer-big-word.is-red{ color:#e21f1f; text-shadow:0 5px 0 rgba(0,0,0,.5), 0 0 40px rgba(180,10,10,.7); }
 
-  .hero-pay-tags{ display:flex; flex-wrap:wrap; justify-content:center; gap:.6rem; margin-bottom:1.4rem; }
-  .pay-tag{
-    display:inline-flex; align-items:center; gap:.5rem;
-    border:1px solid var(--ember-deep); border-radius:6px;
-    padding:.6rem .95rem; background:rgba(0,0,0,.3);
-    font-family:var(--ff-body); font-size:.78rem; color:var(--bone-dim);
+  .offer-tags{ display:flex; flex-direction:column; gap:.65rem; width:100%; max-width:460px; margin:0 auto; }
+  .offer-tag{
+    display:flex; align-items:center; gap:.8rem;
+    background:rgba(8,6,7,.6); border:2px solid var(--ember);
+    border-radius:8px; padding:.85rem 1.15rem;
+    backdrop-filter:blur(2px);
   }
-  .pay-tag svg{ width:16px; height:16px; color:var(--ember); flex:0 0 auto; }
+  .offer-tag svg{ width:24px; height:24px; color:var(--ember-bright); flex:0 0 auto; }
+  .offer-tag span{
+    font-family:var(--ff-body); font-weight:700; font-size:1rem;
+    color:#fff; text-align:left; line-height:1.25;
+  }
 
   .hero-trust{
     display:flex; align-items:center; justify-content:center;
     gap:1rem; flex-wrap:wrap;
-    font-family:var(--ff-mono); font-size:.66rem; letter-spacing:.05em;
-    text-transform:uppercase; color:var(--bone-dim);
+    font-family:var(--ff-mono); font-size:.68rem; letter-spacing:.05em;
+    text-transform:uppercase; color:#fff;
   }
   .trust-item{ display:inline-flex; align-items:center; gap:.4rem; }
-  .trust-item svg{ width:15px; height:15px; color:var(--ember); flex:0 0 auto; }
-  .trust-sep{ width:1px; height:14px; background:var(--line); }
+  .trust-item svg{ width:15px; height:15px; color:var(--ember-bright); flex:0 0 auto; }
+  .trust-sep{ width:1px; height:14px; background:rgba(255,255,255,.25); }
 
-  /* ---------- promo strip (auto-rotating banner #2) ---------- */
-  .promo-strip{
-    position:relative;
-    background:var(--charcoal);
-    border-bottom:1px solid var(--line);
-    padding:2.2rem 1.25rem;
-    overflow:hidden;
-  }
-  .promo-track{ position:relative; max-width:640px; margin:0 auto; text-align:center; }
-  .promo-slide{ }
-  .promo-track.has-multiple .promo-slide{
-    position:absolute; inset:0; opacity:0;
-    transition:opacity 1.2s ease;
-  }
-  .promo-track.has-multiple .promo-slide.is-active{ position:relative; opacity:1; }
-  .promo-eyebrow{
-    font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.18em;
-    text-transform:uppercase; color:var(--ember); display:block; margin-bottom:.5rem;
-  }
-  .promo-eyebrow::after{
-    content:""; display:block; width:34px; height:2px;
-    background:var(--ember-bright); margin:.5rem auto 0;
-  }
-  .promo-big{
-    display:flex; align-items:baseline; justify-content:center; gap:.5rem;
-    flex-wrap:wrap; margin-bottom:.5rem;
-  }
-  .promo-big-num{
-    font-family:var(--ff-display); font-weight:800;
-    font-size:clamp(2.6rem, 7vw, 4.2rem); line-height:.9; color:var(--bone);
-  }
-  .promo-big-text{
-    font-family:var(--ff-display); font-weight:800;
-    font-size:clamp(1.5rem, 4vw, 2.4rem); line-height:1.05;
-  }
-  .promo-big-text.is-white{ color:var(--bone); }
-  .promo-big-text.is-red{ color:#d61f1f; }
-  .promo-sub{
-    font-family:var(--ff-body); font-size:.85rem; color:var(--bone-dim); margin-bottom:1.3rem;
-  }
   .glitch{ color:var(--ember-bright); position:relative; }
   @media (prefers-reduced-motion:no-preference){
     .glitch{ animation:flicker 5s infinite; }
@@ -622,11 +587,11 @@
       position:absolute; top:2px; right:4px;
       font-size:.56rem; padding:.04rem .32rem;
     }
-    .hero{ padding:2.4rem 1rem 2.2rem; }
-    .hero-claim{ font-size:.85rem; }
-    .hero-pay-tags{ flex-direction:column; align-items:center; }
+    .hero{ padding:2.6rem 1rem 2.3rem; }
+    .offer-claim{ font-size:.88rem; }
+    .offer-tag{ padding:.7rem .9rem; }
+    .offer-tag span{ font-size:.88rem; }
     .hero-trust{ gap:.6rem; }
-    .promo-strip{ padding:1.8rem 1rem; }
     .ticker{ padding:1.8rem 0 2rem; }
     .ticker-item{ width:140px; }
     .ticker-card{ height:185px; }
@@ -782,11 +747,6 @@
 <section class="view" id="view-home">
 
   <section class="hero">
-    <div class="slide is-active" data-slide="1"><svg class="slide-motif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><use href="#i-moon"/></svg></div>
-    <div class="slide" data-slide="2"><svg class="slide-motif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><use href="#i-moth"/></svg></div>
-    <div class="slide" data-slide="3"><svg class="slide-motif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><use href="#i-skull"/></svg></div>
-    <div class="slide" data-slide="4"><svg class="slide-motif" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><use href="#i-web"/></svg></div>
-
     <div class="hero-content">
       <div class="hero-logo-wrap">
         <img class="hero-logo" src="images/logo-ghostly.png" alt="Ghostly - Always Halloween">
@@ -797,17 +757,8 @@
           <path d="M260,2 C260,12 256,15 256,22 C256,26 263,26 263,22 C263,17 260,14 260,2 Z"/>
         </svg>
       </div>
-      <p class="hero-claim">No es solo una marca, es una <span class="glitch">declaración</span></p>
 
-      <div class="hero-offer">
-        <span class="hero-offer-pct">10%</span>
-        <span class="hero-offer-off">OFF</span>
-      </div>
-
-      <div class="hero-pay-tags">
-        <span class="pay-tag"><svg viewBox="0 0 24 24"><use href="#i-cash"/></svg>con transferencia</span>
-        <span class="pay-tag"><svg viewBox="0 0 24 24"><use href="#i-card"/></svg>hasta 2 cuotas sin interés con tarjeta</span>
-      </div>
+      <div class="hero-offer-slides" id="heroOfferSlides"></div>
 
       <div class="hero-trust">
         <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Compra segura</span>
@@ -817,10 +768,6 @@
         <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>Atención personalizada</span>
       </div>
     </div>
-  </section>
-
-  <section class="promo-strip" aria-label="Promociones">
-    <div class="promo-track" id="promoTrack"></div>
   </section>
 
   <nav class="ticker" aria-label="Categorías">
@@ -1542,82 +1489,74 @@
   document.getElementById('logoHome').addEventListener('click', () => showView('home'));
 
   /* =========================================================
-     PROMO STRIP (banner #2 — auto-rotates every 5s)
+     HERO OFFER SLIDES (one banner, content alternates every 3s)
   ========================================================= */
-  const TRUST_ROW_HTML = `
-    <div class="hero-trust">
-      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-lock"/></svg>Compra segura</span>
-      <span class="trust-sep"></span>
-      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg>Envíos a todo el país</span>
-      <span class="trust-sep"></span>
-      <span class="trust-item"><svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>Atención personalizada</span>
-    </div>`;
-
-  const PROMO_SLIDES = [
+  const OFFER_SLIDES = [
+    {
+      claim: 'No es solo una marca, es una <span class="glitch">declaración</span>',
+      bigNum: "10%",
+      bigWords: [ {text:"OFF", cls:"is-red"} ],
+      tags: [
+        { icon:"i-cash", text:"con transferencia" },
+        { icon:"i-card", text:"hasta 2 cuotas sin interés con tarjeta" }
+      ]
+    },
     {
       eyebrow: "Activamos",
       bigNum: "2",
-      bigText: [ {text:"CUOTAS", cls:"is-white"}, {text:"SIN INTERÉS", cls:"is-red"} ],
-      sub: "con tarjeta de crédito"
+      bigWords: [ {text:"CUOTAS", cls:"is-white"}, {text:"SIN INTERÉS", cls:"is-red"} ],
+      tags: [
+        { icon:"i-card", text:"con tarjeta de crédito" }
+      ]
     }
-    // Agregá más objetos acá (mismo formato) y van a rotar solas cada 5s.
+    // Agregá más objetos acá (mismo formato) y se suman a la rotación de 3s.
   ];
 
-  function promoSlideHTML(slide){
-    const bigText = slide.bigText.map(t => `<span class="promo-big-text ${t.cls}">${t.text}</span>`).join('');
+  function offerSlideHTML(slide){
+    const eyebrowHTML = slide.eyebrow ? `<span class="offer-eyebrow">${slide.eyebrow}</span>` : '';
+    const claimHTML = slide.claim ? `<p class="offer-claim">${slide.claim}</p>` : '';
+    const wordsHTML = slide.bigWords.map(w => `<span class="offer-big-word ${w.cls}">${w.text}</span>`).join('');
+    const tagsHTML = slide.tags.map(t => `
+      <div class="offer-tag">
+        <svg viewBox="0 0 24 24"><use href="#${t.icon}"/></svg>
+        <span>${t.text}</span>
+      </div>`).join('');
     return `
-      <div class="promo-slide">
-        <span class="promo-eyebrow">${slide.eyebrow}</span>
-        <div class="promo-big">
-          <span class="promo-big-num">${slide.bigNum}</span>
-          ${bigText}
+      <div class="offer-slide">
+        ${eyebrowHTML}
+        ${claimHTML}
+        <div class="offer-big">
+          <span class="offer-big-num">${slide.bigNum}</span>
+          ${wordsHTML}
         </div>
-        <p class="promo-sub">${slide.sub}</p>
-        ${TRUST_ROW_HTML}
+        <div class="offer-tags">${tagsHTML}</div>
       </div>`;
   }
 
-  function renderPromoStrip(){
-    const track = document.getElementById('promoTrack');
-    track.innerHTML = PROMO_SLIDES.map(promoSlideHTML).join('');
-    if(PROMO_SLIDES.length > 1){
-      track.classList.add('has-multiple');
-      const slides = track.querySelectorAll('.promo-slide');
-      slides[0].classList.add('is-active');
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(!reduce){
-        let idx = 0;
-        setInterval(() => {
-          slides[idx].classList.remove('is-active');
-          idx = (idx + 1) % slides.length;
-          slides[idx].classList.add('is-active');
-        }, 5000);
-      } else {
-        slides.forEach(s => s.classList.add('is-active'));
-      }
-    }
-  }
-
-  /* =========================================================
-     HERO CROSSFADE
-  ========================================================= */
-  (function(){
-    const slides = document.querySelectorAll('.slide');
+  function renderHeroOfferSlides(){
+    const wrap = document.getElementById('heroOfferSlides');
+    wrap.innerHTML = OFFER_SLIDES.map(offerSlideHTML).join('');
+    const slides = wrap.querySelectorAll('.offer-slide');
+    slides[0].classList.add('is-active');
+    if(slides.length < 2) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce || slides.length < 2) return;
+    if(reduce){
+      slides.forEach(s => s.classList.add('is-active'));
+      return;
+    }
     let idx = 0;
     setInterval(() => {
       slides[idx].classList.remove('is-active');
       idx = (idx + 1) % slides.length;
       slides[idx].classList.add('is-active');
     }, 3000);
-  })();
+  }
 
   /* =========================================================
      INIT
   ========================================================= */
   renderTicker();
-  renderPromoStrip();
+  renderHeroOfferSlides();
   renderFilters();
   renderHomeRows();
   renderCatalog();
