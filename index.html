@@ -759,10 +759,15 @@
     border-color:var(--ember-bright); color:var(--ember-bright);
     background:rgba(227,73,31,.12); transform:translateY(-2px);
   }
-  .footer-col h3{
+  .footer-col h3, .footer-acc summary{
     font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.1em;
     text-transform:uppercase; color:var(--ember); margin:0 0 1.1rem; font-weight:500;
   }
+  .footer-acc summary{
+    list-style:none; cursor:default; display:flex; align-items:center; gap:.4rem;
+  }
+  .footer-acc summary::-webkit-details-marker{ display:none; }
+  .footer-acc-chevron{ display:none; width:13px; height:13px; margin-left:auto; transition:transform .2s; }
   .footer-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.65rem; }
   .footer-col ul li button, .footer-col ul li a{
     font-family:var(--ff-body); font-size:.85rem; color:var(--bone-dim);
@@ -807,8 +812,13 @@
     .footer-brand{ grid-column:1 / -1; }
   }
   @media (max-width:520px){
-    .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+    .footer-grid{ grid-template-columns:1fr; gap:1.4rem; }
     .footer-bottom{ flex-direction:column; align-items:flex-start; }
+    .footer-acc{ border-bottom:1px solid var(--line); padding-bottom:1.1rem; }
+    .footer-acc summary{ cursor:pointer; margin-bottom:0; padding:.2rem 0; }
+    .footer-acc[open] summary{ margin-bottom:.9rem; }
+    .footer-acc-chevron{ display:block; color:var(--bone-dim); }
+    .footer-acc[open] .footer-acc-chevron{ transform:rotate(180deg); }
   }
 
   @media (max-width:680px){
@@ -1166,8 +1176,8 @@
       </div>
     </div>
 
-    <div class="footer-col">
-      <h3>Categorías</h3>
+    <details class="footer-col footer-acc" open>
+      <summary>Categorías <svg class="footer-acc-chevron" viewBox="0 0 24 24"><use href="#i-chevron"/></svg></summary>
       <ul>
         <li><button type="button" data-footnav-cat="ceramica">Cerámica</button></li>
         <li><button type="button" data-footnav-cat="almohadones">Almohadones</button></li>
@@ -1176,10 +1186,10 @@
         <li><button type="button" data-footnav-cat="vasos">Vasos</button></li>
         <li><button type="button" id="footAllProducts">Ver todos los productos</button></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="footer-col">
-      <h3>Ayuda</h3>
+    <details class="footer-col footer-acc" open>
+      <summary>Ayuda <svg class="footer-acc-chevron" viewBox="0 0 24 24"><use href="#i-chevron"/></svg></summary>
       <ul>
         <li><button type="button" class="footnav-info" data-info="faq">Preguntas frecuentes</button></li>
         <li><button type="button" class="footnav-info" data-info="envios">Envíos y entregas</button></li>
@@ -1187,10 +1197,10 @@
         <li><button type="button" class="footnav-info" data-info="terminos">Términos y condiciones</button></li>
         <li><button type="button" class="footnav-info" data-info="privacidad">Política de privacidad</button></li>
       </ul>
-    </div>
+    </details>
 
-    <div class="footer-col">
-      <h3>Contacto</h3>
+    <details class="footer-col footer-acc" open>
+      <summary>Contacto <svg class="footer-acc-chevron" viewBox="0 0 24 24"><use href="#i-chevron"/></svg></summary>
       <ul class="footer-contact">
         <li><a href="mailto:ghostlystore@outlook.com"><svg viewBox="0 0 24 24"><use href="#i-mail"/></svg>ghostlystore@outlook.com</a></li>
         <li><a href="https://wa.me/5491133144888" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>11 3314-4888</a></li>
@@ -1200,7 +1210,7 @@
       <button type="button" class="footer-subscribe-btn" id="footSubscribe">
         <svg viewBox="0 0 24 24"><use href="#i-bell"/></svg>Recibir novedades
       </button>
-    </div>
+    </details>
 
   </div>
 
@@ -2341,6 +2351,13 @@
   /* =========================================================
      TOPBAR HEIGHT (keeps the sticky hero docked right below it)
   ========================================================= */
+  /* =========================================================
+     FOOTER ACCORDIONS (collapsed by default on mobile only)
+  ========================================================= */
+  if(window.matchMedia('(max-width:520px)').matches){
+    document.querySelectorAll('.footer-acc').forEach(el => el.removeAttribute('open'));
+  }
+
   function syncTopbarHeight(){
     const topbar = document.querySelector('.topbar');
     if(topbar) document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
