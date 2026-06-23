@@ -172,6 +172,7 @@
   .hero.is-compact .offer-tag svg{ width:13px; height:13px; }
   .hero.is-compact .offer-tag span{ font-size:.62rem; }
   .hero.is-compact .novelty-caption{ max-height:0; opacity:0; margin:0; overflow:hidden; }
+  .hero.is-compact .novelty-slide-tall{ min-height:0; justify-content:center; }
   .hero.is-compact .novelty-feature-name{ max-height:0; opacity:0; margin:0; }
   .hero.is-compact .hero-arrow{ width:26px; height:26px; }
   .hero.is-compact .hero-arrow svg{ width:12px; height:12px; }
@@ -265,6 +266,12 @@
   .trust-sep{ display:inline-block; width:1px; height:13px; background:rgba(255,255,255,.3); }
 
   /* ---------- novelty: photo lives in the background; this is just the caption ---------- */
+  .novelty-slide-tall{
+    min-height:clamp(180px, 38vw, 380px);
+    justify-content:flex-end;
+    padding-bottom:.4rem;
+    transition:min-height .35s ease;
+  }
   .novelty-feature{
     display:block; background:none; border:none; padding:0; cursor:pointer;
     margin:0 auto;
@@ -1811,7 +1818,8 @@
       // así (mismo formato) y va a entrar en la rotación del banner.
       type: "novelty",
       kind: "new",            // "new" -> "Nuevo" · "restock" -> "Reingreso"
-      productId: "p14"
+      productId: "p14",
+      photo: "images/fotoprueba.webp"  // opcional: si no la pones, usa la foto de la categoría
     }
     // Agregá más objetos acá (mismo formato) y se suman a la rotación de 5s.
   ];
@@ -1823,7 +1831,7 @@
       const isNew = slide.kind === "new";
       const tagLabel = isNew ? "Nuevo · recién llegado a la tienda" : "Reingreso · volvió a haber stock";
       return `
-        <div class="offer-slide">
+        <div class="offer-slide novelty-slide-tall">
           <button type="button" class="novelty-feature" data-cat="${p.cat}">
             <div class="novelty-caption">
               <span class="novelty-caption-cat">${p.catLabel}</span>
@@ -1870,7 +1878,9 @@
     function applyNoveltyBg(activeIdx){
       const data = OFFER_SLIDES[activeIdx];
       const p = data && data.type === 'novelty' ? PRODUCTS_BY_ID[data.productId] : null;
-      const photo = p ? CATEGORY_IMAGES[p.cat] : null;
+      const photo = data && data.type === 'novelty'
+        ? (data.photo || (p ? CATEGORY_IMAGES[p.cat] : null))
+        : null;
       if(photo){
         noveltyBg.style.backgroundImage = `url('${photo}')`;
         noveltyBg.classList.add('is-active');
