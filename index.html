@@ -629,7 +629,7 @@
     background:none; border:none; padding:0;
   }
   .back-link:hover{ color:var(--ember-bright); }
-  .filters{ display:flex; gap:.55rem; flex-wrap:wrap; margin:1.4rem 0 1.4rem; }
+  .filters{ display:flex; gap:.55rem; flex-wrap:wrap; justify-content:center; margin:1.4rem 0 1.4rem; }
 
   .subcat-panel{
     background:var(--charcoal);
@@ -1248,6 +1248,9 @@
       ["Hornos","hornos"],
       ["Platos","platos"],
       ["Decoración","decoracion"]
+    ],
+    hogar: [
+      ["Accesorios de Cocina","accesorios-cocina"]
     ]
   };
 
@@ -1259,10 +1262,10 @@
     {id:"p5",  name:"Almohadón Pastel Bat",        cat:"pastel-goth",  catLabel:"Pastel Goth",  priceArs:46000},
     {id:"p6",  name:"Aros Luna Pastel",            cat:"pastel-goth",  catLabel:"Pastel Goth",  priceArs:15000},
     {id:"p7",  name:"Portavelas Luna Negra",       cat:"hogar",        catLabel:"Hogar",        priceArs:32000},
-    {id:"p8",  name:"Set Especieros Gótico",       cat:"hogar",        catLabel:"Hogar",        priceArs:50000},
+    {id:"p8",  name:"Set Especieros Gótico",       cat:"hogar",        catLabel:"Hogar",        priceArs:50000, subcat:"accesorios-cocina"},
     {id:"p9",  name:"Espejo Roto Vintage",         cat:"hogar",        catLabel:"Hogar",        priceArs:65000},
     {id:"p10", name:"Portacapsulas Fantasma",      cat:"hogar",        catLabel:"Hogar",        priceArs:45000},
-    {id:"p11", name:"Caramelera Doble Cara",       cat:"hogar",        catLabel:"Hogar",        priceArs:40000},
+    {id:"p11", name:"Caramelera Doble Cara",       cat:"hogar",        catLabel:"Hogar",        priceArs:40000, subcat:"accesorios-cocina"},
     {id:"p12", name:"Set Decoración Telaraña",     cat:"hogar",        catLabel:"Hogar",        priceArs:28000},
     {id:"p13", name:"Vaso Acrílico Niebla",        cat:"vasos",        catLabel:"Vasos",        priceArs:40000},
     {id:"p14", name:"Vaso Acrílico Bruja",         cat:"vasos",        catLabel:"Vasos",        priceArs:41000},
