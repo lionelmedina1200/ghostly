@@ -363,7 +363,7 @@
     scrollbar-width:none;
     cursor:grab;
     user-select:none;
-    touch-action:pan-x;
+    touch-action:pan-x pan-y;
   }
   .ticker-track::-webkit-scrollbar{ display:none; }
   .ticker-track.is-dragging{ cursor:grabbing; scroll-snap-type:none; }
@@ -624,7 +624,7 @@
   .row-track{
     display:flex; gap:1.1rem; overflow-x:auto; padding-bottom:.6rem;
     scroll-snap-type:x mandatory;
-    touch-action:pan-x;
+    touch-action:pan-x pan-y;
   }
   .row-track::-webkit-scrollbar{ height:6px; }
   .row-track::-webkit-scrollbar-thumb{ background:var(--charcoal-soft); border-radius:4px; }
@@ -647,12 +647,16 @@
     border-bottom:1px dashed var(--line);
     position:relative;
   }
-  .card-art svg{ width:46px; height:46px; color:var(--ember); }
+  .card-art svg:not(.card-art-drip){ width:46px; height:46px; color:var(--ember); }
+  .card-art-drip{
+    position:absolute; left:0; right:0; bottom:-1px; width:100%; height:14px;
+    fill:#7d0f0f; opacity:.85; pointer-events:none;
+  }
   .card-art::before{ content:""; position:absolute; inset:0; opacity:.5; }
-  .card:nth-child(4n+1) .card-art::before{ background:radial-gradient(circle at 30% 30%, rgba(227,73,31,.16), transparent 70%); }
-  .card:nth-child(4n+2) .card-art::before{ background:radial-gradient(circle at 70% 30%, rgba(227,73,31,.1), transparent 70%); }
-  .card:nth-child(4n+3) .card-art::before{ background:radial-gradient(circle at 50% 70%, rgba(227,73,31,.14), transparent 70%); }
-  .card:nth-child(4n+4) .card-art::before{ background:radial-gradient(circle at 30% 70%, rgba(227,73,31,.08), transparent 70%); }
+  .card:nth-child(4n+1) .card-art::before{ background:radial-gradient(circle at 30% 30%, rgba(178,16,16,.28), transparent 70%); }
+  .card:nth-child(4n+2) .card-art::before{ background:radial-gradient(circle at 70% 30%, rgba(178,16,16,.18), transparent 70%); }
+  .card:nth-child(4n+3) .card-art::before{ background:radial-gradient(circle at 50% 70%, rgba(178,16,16,.24), transparent 70%); }
+  .card:nth-child(4n+4) .card-art::before{ background:radial-gradient(circle at 30% 70%, rgba(178,16,16,.14), transparent 70%); }
   .card-pin{
     position:absolute; top:.6rem; left:.6rem;
     font-family:var(--ff-mono); font-size:.62rem; color:var(--fog);
@@ -1778,6 +1782,10 @@
         <div class="card-art">
           <span class="card-pin">No. ${no}</span>
           <svg viewBox="0 0 24 24"><use href="#${icon}"/></svg>
+          <svg class="card-art-drip" viewBox="0 0 200 26" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M28,0 C28,9 25,12 25,18 C25,22 31,22 31,18 C31,13 28,10 28,0 Z"/>
+            <path d="M152,0 C152,7 149,10 149,15 C149,18 154,18 154,15 C154,11 152,8 152,0 Z"/>
+          </svg>
         </div>
         <div class="card-body">
           <div class="card-cat">${p.catLabel}</div>
