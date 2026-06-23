@@ -70,7 +70,7 @@
   html{ scroll-behavior:smooth; overflow-x:hidden; width:100%; touch-action:pan-y; }
   body{
     margin:0;
-    background:linear-gradient(180deg, #3a1a0a 0%, #1c0e07 45vh, #0c0805 100vh, #0c0805 100%);
+    background:linear-gradient(90deg, #3a1a0a 0%, #1c0e07 50%, #0c0805 100%);
     color:var(--bone);
     font-family:var(--ff-body);
     -webkit-font-smoothing:antialiased;
@@ -723,8 +723,9 @@
     margin:2.2rem 0 1.3rem;
     padding:.7rem 1.3rem;
     font-family:var(--ff-body); font-weight:700; font-size:.88rem;
-    color:var(--ember-bright); background:rgba(227,73,31,.12);
-    border:1.5px solid var(--ember); border-radius:999px; cursor:pointer;
+    color:#fff; background:var(--void);
+    border:1.5px solid var(--ember-bright); border-radius:999px; cursor:pointer;
+    box-shadow:0 4px 14px rgba(0,0,0,.5);
     transition:border-color .2s, color .2s, background .2s, transform .2s;
   }
   .back-link svg{ width:15px; height:15px; transform:rotate(0deg); }
