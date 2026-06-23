@@ -621,7 +621,7 @@
   .cta-stamp:hover{ transform:rotate(0deg) scale(1.03); background:var(--ember-bright); }
 
   /* ---------- catalog view ---------- */
-  .page-head{ padding-top:2rem; margin-bottom:.4rem; }
+  .page-head{ padding-top:2rem; margin-bottom:1.1rem; }
   .page-head h1{ font-family:var(--ff-display); font-weight:600; font-size:clamp(1.7rem,4vw,2.4rem); margin:.3rem 0 0; }
   .back-link{
     display:inline-flex; align-items:center; gap:.4rem; margin-bottom:1rem;
@@ -629,24 +629,69 @@
     background:none; border:none; padding:0;
   }
   .back-link:hover{ color:var(--ember-bright); }
-  .filters{ display:flex; gap:.55rem; flex-wrap:wrap; margin:1.4rem 0 2rem; }
-  .sub-filters{ margin:-1.2rem 0 2rem; }
-  .sub-filters[hidden]{ display:none; }
-  .sub-filters .filter-pill{
-    font-size:.66rem; padding:.35rem .75rem;
-    background:none; border-color:transparent; color:var(--fog);
+  .filters{ display:flex; gap:.55rem; flex-wrap:wrap; margin:1.4rem 0 1.4rem; }
+
+  .subcat-panel{
+    background:var(--charcoal);
+    border:1px solid var(--ember-deep);
+    border-radius:10px;
+    padding:1rem 1.1rem 1.1rem;
+    margin:0 0 2.2rem;
+    animation:panel-in .25s ease;
   }
-  .sub-filters .filter-pill:hover{ color:var(--bone); border-color:var(--line); }
-  .sub-filters .filter-pill.is-active{ background:none; border-color:var(--ember); color:var(--ember-bright); }
+  @keyframes panel-in{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:translateY(0); } }
+  .subcat-panel[hidden]{ display:none; }
+  .subcat-panel-label{
+    display:block;
+    font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--bone-dim);
+    margin-bottom:.8rem;
+  }
+  .subcat-panel-label strong{ color:var(--ember-bright); font-weight:600; }
+  .subcat-pills{ display:flex; gap:.5rem; flex-wrap:wrap; }
+  .subcat-pills .filter-pill{
+    font-size:.78rem; padding:.5rem .9rem;
+    background:var(--charcoal-soft); border:1px solid var(--line); color:var(--bone-dim);
+  }
+  .subcat-pills .filter-pill:hover{ border-color:var(--ember-deep); color:var(--bone); }
+  .subcat-pills .filter-pill.is-active{ background:var(--ember); border-color:var(--ember-bright); color:var(--void); }
   .filter-pill{
-    font-family:var(--ff-mono); font-size:.72rem; letter-spacing:.04em;
-    padding:.45rem .9rem; border:1px solid var(--line); border-radius:20px;
+    display:inline-flex; align-items:center; gap:.55rem;
+    font-family:var(--ff-display); font-weight:600; font-size:.88rem;
+    letter-spacing:.01em;
+    padding:.4rem 1.05rem .4rem .4rem; border:1.5px solid var(--line); border-radius:999px;
     color:var(--bone-dim); background:var(--charcoal);
-    cursor:pointer; transition:all .2s;
+    cursor:pointer; transition:border-color .2s, color .2s, background .2s, transform .2s, box-shadow .2s;
   }
-  .filter-pill:hover{ border-color:var(--ember-deep); color:var(--bone); }
-  .filter-pill.is-active{ background:var(--ember); border-color:var(--ember-bright); color:var(--void); }
-  .filter-pill.is-disabled{ opacity:.45; cursor:default; }
+  .filter-pill-thumb{
+    display:flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:50%; overflow:hidden;
+    flex:0 0 auto; background:var(--charcoal-soft);
+  }
+  .filter-pill-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .filter-pill-thumb-icon svg{ width:17px; height:17px; color:var(--ember); }
+  .filter-pill:hover{
+    border-color:var(--ember); color:var(--bone);
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,.35);
+  }
+  .filter-pill.is-active{
+    background:linear-gradient(135deg, var(--ember-bright), var(--ember));
+    border-color:var(--ember-bright); color:var(--void);
+    box-shadow:0 8px 20px rgba(227,73,31,.4);
+  }
+  .filter-pill.is-active .filter-pill-thumb{ box-shadow:0 0 0 2px rgba(0,0,0,.25) inset; }
+  .filter-pill.is-active .filter-pill-thumb-icon svg{ color:var(--void); }
+  .filter-pill.is-disabled{
+    display:inline-flex; align-items:center; gap:.55rem;
+    padding:.4rem 1.05rem .4rem .4rem; border:1.5px solid var(--line); border-radius:999px;
+    background:var(--charcoal); opacity:.5; cursor:default;
+    font-family:var(--ff-display); font-weight:600; font-size:.88rem; color:var(--bone-dim);
+  }
+  .filter-pill .soon-tag{
+    font-family:var(--ff-mono); font-size:.6rem; letter-spacing:.04em;
+    text-transform:uppercase; color:var(--fog); margin-left:-.2rem;
+  }
   .filter-pill.is-disabled:hover{ border-color:var(--line); color:var(--bone-dim); }
   .catalog-grid{
     display:grid;
@@ -972,7 +1017,10 @@
       <h1>Todos los productos</h1>
     </div>
     <div class="filters" id="filters"></div>
-    <div class="filters sub-filters" id="subFilters" hidden></div>
+    <div class="subcat-panel" id="subFilters" hidden>
+      <span class="subcat-panel-label">Filtrar <strong id="subFiltersCatName"></strong> por tipo</span>
+      <div class="subcat-pills" id="subFiltersPills"></div>
+    </div>
     <div class="catalog-grid" id="grid"></div>
     <p class="empty-state" id="emptyState">No encontramos productos para esta búsqueda.</p>
   </main>
@@ -1415,10 +1463,18 @@
   function renderFilters(){
     const wrap = document.getElementById('filters');
     const items = [["Todos","todos"], ...CATEGORIES];
-    wrap.innerHTML = items.map(([label, slug, disabled]) => disabled
-      ? `<span class="filter-pill is-disabled">${label} · pronto</span>`
-      : `<button type="button" class="filter-pill" data-filter="${slug}">${label}</button>`
-    ).join('');
+    wrap.innerHTML = items.map(([label, slug, disabled]) => {
+      const photo = CATEGORY_IMAGES[slug];
+      const icon = ICONS[slug] || "i-sparkle";
+      const media = slug === "todos"
+        ? `<span class="filter-pill-thumb filter-pill-thumb-icon"><svg viewBox="0 0 24 24"><use href="#i-sparkle"/></svg></span>`
+        : photo
+          ? `<span class="filter-pill-thumb"><img src="${photo}" alt="" loading="lazy"></span>`
+          : `<span class="filter-pill-thumb filter-pill-thumb-icon"><svg viewBox="0 0 24 24"><use href="#${icon}"/></svg></span>`;
+      return disabled
+        ? `<span class="filter-pill is-disabled">${media}<span>${label}</span><span class="soon-tag">pronto</span></span>`
+        : `<button type="button" class="filter-pill" data-filter="${slug}">${media}<span>${label}</span></button>`;
+    }).join('');
     wrap.querySelectorAll('[data-filter]').forEach(btn => {
       btn.addEventListener('click', () => {
         state.catalogFilter = btn.dataset.filter;
@@ -1430,19 +1486,22 @@
   }
 
   function renderSubFilters(){
-    const wrap = document.getElementById('subFilters');
+    const panel = document.getElementById('subFilters');
+    const pillsWrap = document.getElementById('subFiltersPills');
     const subs = SUBCATEGORIES[state.catalogFilter];
     if(!subs){
-      wrap.hidden = true;
-      wrap.innerHTML = '';
+      panel.hidden = true;
+      pillsWrap.innerHTML = '';
       return;
     }
-    wrap.hidden = false;
-    const items = [["Todas","todas"], ...subs];
-    wrap.innerHTML = items.map(([label, slug]) =>
+    panel.hidden = false;
+    const catLabel = (CATEGORIES.find(c => c[1] === state.catalogFilter) || ['', ''])[0];
+    document.getElementById('subFiltersCatName').textContent = catLabel;
+    const items = [["Ver todo","todas"], ...subs];
+    pillsWrap.innerHTML = items.map(([label, slug]) =>
       `<button type="button" class="filter-pill" data-subfilter="${slug}">${label}</button>`
     ).join('');
-    wrap.querySelectorAll('[data-subfilter]').forEach(btn => {
+    pillsWrap.querySelectorAll('[data-subfilter]').forEach(btn => {
       btn.addEventListener('click', () => {
         state.catalogSubcat = btn.dataset.subfilter;
         renderCatalog();
