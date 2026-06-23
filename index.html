@@ -67,15 +67,14 @@
     --ff-mono:'JetBrains Mono', monospace;
   }
   *{box-sizing:border-box;}
-  html{ scroll-behavior:smooth; overflow-x:hidden; width:100%; }
+  html{ scroll-behavior:smooth; overflow-x:hidden; width:100%; touch-action:pan-y; }
   body{
     margin:0;
     background:var(--void);
     color:var(--bone);
     font-family:var(--ff-body);
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-    width:100%;
+    touch-action:pan-y;
   }
   a{color:inherit; text-decoration:none;}
   img,svg{display:block;}
@@ -364,6 +363,7 @@
     scrollbar-width:none;
     cursor:grab;
     user-select:none;
+    touch-action:pan-x;
   }
   .ticker-track::-webkit-scrollbar{ display:none; }
   .ticker-track.is-dragging{ cursor:grabbing; scroll-snap-type:none; }
@@ -624,6 +624,7 @@
   .row-track{
     display:flex; gap:1.1rem; overflow-x:auto; padding-bottom:.6rem;
     scroll-snap-type:x mandatory;
+    touch-action:pan-x;
   }
   .row-track::-webkit-scrollbar{ height:6px; }
   .row-track::-webkit-scrollbar-thumb{ background:var(--charcoal-soft); border-radius:4px; }
@@ -797,7 +798,7 @@
   .filter-pill.is-disabled:hover{ border-color:var(--line); color:var(--bone-dim); }
   .catalog-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+    grid-template-columns:repeat(auto-fill, minmax(155px, 1fr));
     gap:1.1rem;
     padding-bottom:3rem;
   }
@@ -2471,6 +2472,7 @@
     if(topbar) document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
   }
   window.addEventListener('resize', syncTopbarHeight);
+  window.addEventListener('load', syncTopbarHeight);
 
   /* =========================================================
      HERO COMPACT-ON-SCROLL
@@ -2488,18 +2490,24 @@
     let observer = null;
 
     function setup(){
-      if(observer) observer.disconnect();
-      const topbar = document.querySelector('.topbar');
-      const topbarH = topbar ? topbar.offsetHeight : 0;
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          hero.classList.toggle('is-compact', !entry.isIntersecting);
-        });
-      }, { rootMargin: `-${topbarH}px 0px 0px 0px`, threshold: 0 });
-      observer.observe(sentinel);
+      try{
+        if(observer) observer.disconnect();
+        const topbar = document.querySelector('.topbar');
+        const topbarH = topbar ? topbar.offsetHeight : 0;
+        observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            hero.classList.toggle('is-compact', !entry.isIntersecting);
+          });
+        }, { rootMargin: `-${topbarH}px 0px 0px 0px`, threshold: 0 });
+        observer.observe(sentinel);
+      } catch(err){
+        // Si algo en este navegador no soporta esto bien, el banner
+        // simplemente no se achica — nunca debe romper el resto del sitio.
+      }
     }
 
     setup();
+    window.addEventListener('load', setup); // re-mide una vez cargaron las fuentes/imágenes
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
