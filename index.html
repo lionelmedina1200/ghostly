@@ -704,16 +704,88 @@
   .empty-state.is-visible{ display:block; }
 
   /* ---------- footer ---------- */
-  footer{
+  /* ---------- footer ---------- */
+  .site-footer{
     border-top:1px solid var(--line);
-    padding:1.6rem 1.25rem;
-    display:flex; align-items:center; justify-content:space-between;
-    flex-wrap:wrap; gap:.6rem;
-    max-width:1280px; margin:0 auto;
-    font-family:var(--ff-mono); font-size:.72rem; color:var(--fog);
+    background:var(--charcoal);
+    padding:3.2rem 1.25rem 0;
   }
-  footer a, footer button{ background:none; border:none; padding:0; font:inherit; color:inherit; cursor:pointer; }
-  footer a:hover, footer button:hover{ color:var(--ember); }
+  .footer-grid{
+    max-width:1280px; margin:0 auto;
+    display:grid; grid-template-columns:1.3fr 1fr 1fr 1.2fr;
+    gap:2.4rem;
+    padding-bottom:2.6rem;
+  }
+  .footer-logo{ display:flex; align-items:center; gap:.5rem; margin-bottom:.8rem; }
+  .footer-logo svg{ width:22px; height:22px; color:var(--ember-bright); }
+  .footer-logo span{ font-family:var(--ff-display); font-weight:700; font-size:1.1rem; color:var(--bone); }
+  .footer-blurb{
+    font-family:var(--ff-body); font-size:.84rem; line-height:1.55;
+    color:var(--bone-dim); margin:0 0 1.2rem; max-width:320px;
+  }
+  .footer-social{ display:flex; gap:.6rem; }
+  .footer-social a{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--line); background:var(--charcoal-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--ff-mono); font-size:.68rem; font-weight:500;
+    color:var(--bone-dim); transition:border-color .2s, color .2s, background .2s, transform .2s;
+  }
+  .footer-social a:hover{
+    border-color:var(--ember-bright); color:var(--ember-bright);
+    background:rgba(227,73,31,.12); transform:translateY(-2px);
+  }
+  .footer-col h3{
+    font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ember); margin:0 0 1.1rem; font-weight:500;
+  }
+  .footer-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.65rem; }
+  .footer-col ul li button, .footer-col ul li a{
+    font-family:var(--ff-body); font-size:.85rem; color:var(--bone-dim);
+    background:none; border:none; padding:0; cursor:pointer; text-align:left;
+    transition:color .2s; line-height:1.3;
+  }
+  .footer-col ul li button:hover, .footer-col ul li a:hover{ color:var(--ember-bright); }
+  .footer-contact li a, .footer-contact li span{
+    display:flex; align-items:center; gap:.55rem;
+  }
+  .footer-contact svg{ width:16px; height:16px; color:var(--ember); flex:0 0 auto; }
+  .footer-contact li span{ color:var(--bone-dim); font-family:var(--ff-body); font-size:.85rem; }
+  .footer-subscribe-btn{
+    display:inline-flex; align-items:center; gap:.5rem;
+    margin-top:1.3rem; padding:.65rem 1.1rem;
+    font-family:var(--ff-body); font-weight:600; font-size:.82rem;
+    color:var(--ember-bright); background:rgba(227,73,31,.1);
+    border:1px solid var(--ember-deep); border-radius:999px; cursor:pointer;
+    transition:background .2s, border-color .2s;
+  }
+  .footer-subscribe-btn svg{ width:16px; height:16px; }
+  .footer-subscribe-btn:hover{ background:rgba(227,73,31,.2); border-color:var(--ember-bright); }
+
+  .footer-bottom{
+    border-top:1px solid var(--line);
+    max-width:1280px; margin:0 auto;
+    padding:1.3rem 0;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:.7rem;
+    font-family:var(--ff-mono); font-size:.7rem; color:var(--fog);
+  }
+  .footer-bottom-links{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+  .footer-bottom-links button{
+    font-family:var(--ff-mono); font-size:.7rem; color:var(--fog);
+    background:none; border:none; padding:0; cursor:pointer; transition:color .2s;
+  }
+  .footer-bottom-links button:hover{ color:var(--ember-bright); }
+  .footer-dot{ color:var(--line); }
+
+  @media (max-width:880px){
+    .footer-grid{ grid-template-columns:1fr 1fr; gap:2rem 1.5rem; }
+    .footer-brand{ grid-column:1 / -1; }
+  }
+  @media (max-width:520px){
+    .footer-grid{ grid-template-columns:1fr; gap:2rem; }
+    .footer-bottom{ flex-direction:column; align-items:flex-start; }
+  }
 
   @media (max-width:680px){
     .topbar-logo span{ display:none; }
@@ -890,6 +962,22 @@
       <path d="M6 10.5a6 6 0 0 1 12 0c0 3.2 1 4.7 2 5.8H4c1-1.1 2-2.6 2-5.8Z"/>
       <path d="M9.5 19a2.5 2.5 0 0 0 5 0"/>
     </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5.5" width="18" height="13" rx="1.6"/>
+      <path d="M4 7l8 6 8-6"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M12 7.5V12l3.2 2"/>
+    </symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z"/>
+      <circle cx="12" cy="9.5" r="2.4"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/>
+      <path d="M8 9.5h8M8 12.5h5"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -1026,9 +1114,71 @@
   </main>
 </section>
 
-<footer>
-  <span>© 2026 Ghostly</span>
-  <span><button id="footHome">Inicio</button> · <button id="footCatalog">Productos</button></span>
+<footer class="site-footer">
+  <div class="footer-grid">
+
+    <div class="footer-col footer-brand">
+      <div class="footer-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#i-skull"/></svg>
+        <span>GHOSTLY</span>
+      </div>
+      <p class="footer-blurb">Objetos góticos y de culto para todos los días del año. No es solo una marca, es una declaración — siempre Halloween.</p>
+      <div class="footer-social" aria-label="Redes sociales">
+        <a href="https://instagram.com/ghostly.ar" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+        <a href="https://tiktok.com/@ghostly.ar" target="_blank" rel="noopener" aria-label="TikTok">TT</a>
+        <a href="https://facebook.com/ghostlyargentina" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
+        <a href="https://wa.me/5491112345678" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h3>Categorías</h3>
+      <ul>
+        <li><button type="button" data-footnav-cat="ceramica">Cerámica</button></li>
+        <li><button type="button" data-footnav-cat="almohadones">Almohadones</button></li>
+        <li><button type="button" data-footnav-cat="hogar">Hogar</button></li>
+        <li><button type="button" data-footnav-cat="accesorios">Accesorios</button></li>
+        <li><button type="button" data-footnav-cat="vasos">Vasos</button></li>
+        <li><button type="button" id="footAllProducts">Ver todos los productos</button></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Ayuda</h3>
+      <ul>
+        <li><button type="button" class="footnav-soon">Preguntas frecuentes</button></li>
+        <li><button type="button" class="footnav-soon">Envíos y entregas</button></li>
+        <li><button type="button" class="footnav-soon">Cambios y devoluciones</button></li>
+        <li><button type="button" class="footnav-soon">Términos y condiciones</button></li>
+        <li><button type="button" class="footnav-soon">Política de privacidad</button></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Contacto</h3>
+      <ul class="footer-contact">
+        <li><a href="mailto:hola@ghostly.com.ar"><svg viewBox="0 0 24 24"><use href="#i-mail"/></svg>hola@ghostly.com.ar</a></li>
+        <li><a href="https://wa.me/5491112345678" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>+54 9 11 1234-5678</a></li>
+        <li><span><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Lun a Vie, 10 a 18 hs</span></li>
+        <li><span><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg>Buenos Aires, Argentina</span></li>
+      </ul>
+      <button type="button" class="footer-subscribe-btn" id="footSubscribe">
+        <svg viewBox="0 0 24 24"><use href="#i-bell"/></svg>Recibir novedades
+      </button>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2026 Ghostly · Hecho con 🎃 en Argentina</span>
+    <span class="footer-bottom-links">
+      <button type="button" class="footnav-soon">Términos</button>
+      <span class="footer-dot">·</span>
+      <button type="button" class="footnav-soon">Privacidad</button>
+      <span class="footer-dot">·</span>
+      <span>Transferencia y tarjetas de crédito/débito</span>
+    </span>
+  </div>
 </footer>
 
 <!-- ============ SHIPPING / COUNTRY MODAL ============ -->
@@ -1908,9 +2058,18 @@
   ========================================================= */
   document.getElementById('goCatalog').addEventListener('click', () => showView('catalog', {cat:'todos', query:''}));
   document.getElementById('backHome').addEventListener('click', () => showView('home'));
-  document.getElementById('footHome').addEventListener('click', () => showView('home'));
-  document.getElementById('footCatalog').addEventListener('click', () => showView('catalog', {cat:'todos', query:''}));
   document.getElementById('logoHome').addEventListener('click', () => showView('home'));
+
+  document.getElementById('footAllProducts').addEventListener('click', () => showView('catalog', {cat:'todos', query:''}));
+  document.querySelectorAll('[data-footnav-cat]').forEach(btn => {
+    btn.addEventListener('click', () => showView('catalog', {cat:btn.dataset.footnavCat, query:''}));
+  });
+  document.querySelectorAll('.footnav-soon').forEach(btn => {
+    btn.addEventListener('click', () => showToast('Esta sección todavía está en construcción'));
+  });
+  document.getElementById('footSubscribe').addEventListener('click', () => {
+    document.getElementById('openSubscribe').click();
+  });
 
   /* =========================================================
      HERO OFFER SLIDES (one banner; "ofertas" + "novedades" all
