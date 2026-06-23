@@ -171,7 +171,9 @@
   .hero.is-compact .offer-tag{ padding:.28rem .55rem; border-width:1px; }
   .hero.is-compact .offer-tag svg{ width:13px; height:13px; }
   .hero.is-compact .offer-tag span{ font-size:.62rem; }
-  .hero.is-compact .novelty-caption{ max-height:0; opacity:0; margin:0; overflow:hidden; }
+  .hero.is-compact .novelty-caption{ margin:0 0 .25rem; gap:.1rem; }
+  .hero.is-compact .novelty-caption-cat{ font-size:.52rem; }
+  .hero.is-compact .novelty-caption-name{ font-size:.78rem; }
   .hero.is-compact .novelty-feature-name{ max-height:0; opacity:0; margin:0; }
   .hero.is-compact .hero-arrow{ width:26px; height:26px; }
   .hero.is-compact .hero-arrow svg{ width:12px; height:12px; }
@@ -628,6 +630,14 @@
   }
   .back-link:hover{ color:var(--ember-bright); }
   .filters{ display:flex; gap:.55rem; flex-wrap:wrap; margin:1.4rem 0 2rem; }
+  .sub-filters{ margin:-1.2rem 0 2rem; }
+  .sub-filters[hidden]{ display:none; }
+  .sub-filters .filter-pill{
+    font-size:.66rem; padding:.35rem .75rem;
+    background:none; border-color:transparent; color:var(--fog);
+  }
+  .sub-filters .filter-pill:hover{ color:var(--bone); border-color:var(--line); }
+  .sub-filters .filter-pill.is-active{ background:none; border-color:var(--ember); color:var(--ember-bright); }
   .filter-pill{
     font-family:var(--ff-mono); font-size:.72rem; letter-spacing:.04em;
     padding:.45rem .9rem; border:1px solid var(--line); border-radius:20px;
@@ -962,6 +972,7 @@
       <h1>Todos los productos</h1>
     </div>
     <div class="filters" id="filters"></div>
+    <div class="filters sub-filters" id="subFilters" hidden></div>
     <div class="catalog-grid" id="grid"></div>
     <p class="empty-state" id="emptyState">No encontramos productos para esta búsqueda.</p>
   </main>
@@ -1133,6 +1144,7 @@
     user: null,                // {email} | null
     pendingCheckout: false,
     catalogFilter: 'todos',
+    catalogSubcat: 'todas',
     catalogQuery: '',
     subscribed: false,
     subscribedEmail: null
@@ -1178,10 +1190,23 @@
     ["Pastel Goth","pastel-goth"]
   ];
 
+  // Subcategorías por categoría principal. Si una categoría no aparece
+  // acá, simplemente no muestra la segunda fila de filtros.
+  const SUBCATEGORIES = {
+    ceramica: [
+      ["Tazas","tazas"],
+      ["Tazones","tazones"],
+      ["Portavelas","portavelas"],
+      ["Hornos","hornos"],
+      ["Platos","platos"],
+      ["Decoración","decoracion"]
+    ]
+  };
+
   const PRODUCTS = [
-    {id:"p1",  name:"Taza Calavera Floral",       cat:"ceramica",     catLabel:"Ceramica",     priceArs:35000},
-    {id:"p2",  name:"Plato Telaraña",              cat:"ceramica",     catLabel:"Ceramica",     priceArs:30000},
-    {id:"p3",  name:"Taza Luna Creciente",         cat:"ceramica",     catLabel:"Ceramica",     priceArs:33000},
+    {id:"p1",  name:"Taza Calavera Floral",       cat:"ceramica",     catLabel:"Ceramica",     priceArs:35000, subcat:"tazas"},
+    {id:"p2",  name:"Plato Telaraña",              cat:"ceramica",     catLabel:"Ceramica",     priceArs:30000, subcat:"platos"},
+    {id:"p3",  name:"Taza Luna Creciente",         cat:"ceramica",     catLabel:"Ceramica",     priceArs:33000, subcat:"tazas"},
     {id:"p4",  name:"Almohadón Murciélago",        cat:"almohadones",  catLabel:"Almohadones",  priceArs:48000},
     {id:"p5",  name:"Almohadón Pastel Bat",        cat:"pastel-goth",  catLabel:"Pastel Goth",  priceArs:46000},
     {id:"p6",  name:"Aros Luna Pastel",            cat:"pastel-goth",  catLabel:"Pastel Goth",  priceArs:15000},
@@ -1207,7 +1232,11 @@
     {id:"p26", name:"Adorno Navidark Calavera",    cat:"navidark",     catLabel:"Navidark",     priceArs:18000},
     {id:"p27", name:"Gorrito Navidark",            cat:"navidark",     catLabel:"Navidark",     priceArs:19000},
     {id:"p28", name:"Bufanda Bruja",               cat:"clothing",     catLabel:"Clothing",     priceArs:55000},
-    {id:"p29", name:"Remera Pastel Witch",         cat:"clothing",     catLabel:"Clothing",     priceArs:38000}
+    {id:"p29", name:"Remera Pastel Witch",         cat:"clothing",     catLabel:"Clothing",     priceArs:38000},
+    {id:"p30", name:"Tazón Calavera Grande",       cat:"ceramica",     catLabel:"Ceramica",     priceArs:38000, subcat:"tazones"},
+    {id:"p31", name:"Portavelas Catedral Cerámica",cat:"ceramica",     catLabel:"Ceramica",     priceArs:36000, subcat:"portavelas"},
+    {id:"p32", name:"Mini Horno Decorativo",       cat:"ceramica",     catLabel:"Ceramica",     priceArs:44000, subcat:"hornos"},
+    {id:"p33", name:"Figura Calavera Decorativa",  cat:"ceramica",     catLabel:"Ceramica",     priceArs:27000, subcat:"decoracion"}
   ];
   const PRODUCTS_BY_ID = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
 
@@ -1243,8 +1272,9 @@
     document.getElementById('view-home').hidden = name !== 'home';
     document.getElementById('view-catalog').hidden = name !== 'catalog';
     if(name === 'catalog'){
-      if(opts.cat) state.catalogFilter = opts.cat;
+      if(opts.cat){ state.catalogFilter = opts.cat; state.catalogSubcat = 'todas'; }
       if(typeof opts.query === 'string') state.catalogQuery = opts.query;
+      renderSubFilters();
       renderCatalog();
     }
     window.scrollTo({top:0, behavior:'smooth'});
@@ -1392,6 +1422,29 @@
     wrap.querySelectorAll('[data-filter]').forEach(btn => {
       btn.addEventListener('click', () => {
         state.catalogFilter = btn.dataset.filter;
+        state.catalogSubcat = 'todas';
+        renderSubFilters();
+        renderCatalog();
+      });
+    });
+  }
+
+  function renderSubFilters(){
+    const wrap = document.getElementById('subFilters');
+    const subs = SUBCATEGORIES[state.catalogFilter];
+    if(!subs){
+      wrap.hidden = true;
+      wrap.innerHTML = '';
+      return;
+    }
+    wrap.hidden = false;
+    const items = [["Todas","todas"], ...subs];
+    wrap.innerHTML = items.map(([label, slug]) =>
+      `<button type="button" class="filter-pill" data-subfilter="${slug}">${label}</button>`
+    ).join('');
+    wrap.querySelectorAll('[data-subfilter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.catalogSubcat = btn.dataset.subfilter;
         renderCatalog();
       });
     });
@@ -1401,13 +1454,17 @@
     const q = state.catalogQuery.trim().toLowerCase();
     const filtered = PRODUCTS.filter(p => {
       const matchCat = state.catalogFilter === 'todos' || p.cat === state.catalogFilter;
+      const matchSub = state.catalogSubcat === 'todas' || p.subcat === state.catalogSubcat;
       const matchQuery = !q || p.name.toLowerCase().includes(q) || p.catLabel.toLowerCase().includes(q);
-      return matchCat && matchQuery;
+      return matchCat && matchSub && matchQuery;
     });
     document.getElementById('grid').innerHTML = filtered.map((p,i)=>cardHTML(p, String(i+1).padStart(3,'0'))).join('');
     document.getElementById('emptyState').classList.toggle('is-visible', filtered.length === 0);
     document.querySelectorAll('#filters .filter-pill[data-filter]').forEach(btn => {
       btn.classList.toggle('is-active', btn.dataset.filter === state.catalogFilter);
+    });
+    document.querySelectorAll('#subFilters .filter-pill[data-subfilter]').forEach(btn => {
+      btn.classList.toggle('is-active', btn.dataset.subfilter === state.catalogSubcat);
     });
   }
 
@@ -1963,6 +2020,7 @@
   renderTicker();
   renderHeroOfferSlides();
   renderFilters();
+  renderSubFilters();
   renderHomeRows();
   renderCatalog();
   updateCartBadge();
