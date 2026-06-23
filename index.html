@@ -172,7 +172,6 @@
   .hero.is-compact .offer-tag svg{ width:13px; height:13px; }
   .hero.is-compact .offer-tag span{ font-size:.62rem; }
   .hero.is-compact .novelty-caption{ max-height:0; opacity:0; margin:0; overflow:hidden; }
-  .hero.is-compact .novelty-slide-tall{ min-height:0; justify-content:center; }
   .hero.is-compact .novelty-feature-name{ max-height:0; opacity:0; margin:0; }
   .hero.is-compact .hero-arrow{ width:26px; height:26px; }
   .hero.is-compact .hero-arrow svg{ width:12px; height:12px; }
@@ -266,12 +265,6 @@
   .trust-sep{ display:inline-block; width:1px; height:13px; background:rgba(255,255,255,.3); }
 
   /* ---------- novelty: photo lives in the background; this is just the caption ---------- */
-  .novelty-slide-tall{
-    min-height:clamp(180px, 38vw, 380px);
-    justify-content:flex-end;
-    padding-bottom:.4rem;
-    transition:min-height .35s ease;
-  }
   .novelty-feature{
     display:block; background:none; border:none; padding:0; cursor:pointer;
     margin:0 auto;
@@ -1831,7 +1824,7 @@
       const isNew = slide.kind === "new";
       const tagLabel = isNew ? "Nuevo · recién llegado a la tienda" : "Reingreso · volvió a haber stock";
       return `
-        <div class="offer-slide novelty-slide-tall">
+        <div class="offer-slide">
           <button type="button" class="novelty-feature" data-cat="${p.cat}">
             <div class="novelty-caption">
               <span class="novelty-caption-cat">${p.catLabel}</span>
