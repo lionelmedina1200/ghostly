@@ -424,6 +424,30 @@
     padding:1.8rem 1.6rem;
   }
   .modal.modal-cart{ max-width:480px; }
+  .modal.modal-wide{ max-width:640px; }
+  .info-modal-body{ margin-top:1rem; }
+  .info-modal-body p{
+    font-family:var(--ff-body); font-size:.88rem; line-height:1.6;
+    color:var(--bone-dim); margin:0 0 1rem;
+  }
+  .info-modal-body h3{
+    font-family:var(--ff-display); font-weight:600; font-size:1rem;
+    color:var(--bone); margin:1.4rem 0 .5rem;
+  }
+  .info-modal-body h3:first-child{ margin-top:0; }
+  .info-modal-body ul{ margin:0 0 1rem; padding-left:1.2rem; }
+  .info-modal-body li{
+    font-family:var(--ff-body); font-size:.88rem; line-height:1.6;
+    color:var(--bone-dim); margin-bottom:.4rem;
+  }
+  .info-modal-body strong{ color:var(--bone); }
+  .faq-item{ border-bottom:1px solid var(--line); padding-bottom:1rem; margin-bottom:1rem; }
+  .faq-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+  .faq-item h3{ font-size:.92rem; margin:0 0 .5rem; color:var(--ember-bright); }
+  .info-disclaimer{
+    margin-top:1.4rem; padding-top:1rem; border-top:1px solid var(--line);
+    font-family:var(--ff-mono); font-size:.66rem; color:var(--fog); line-height:1.5;
+  }
   .modal-close{
     position:absolute; top:.8rem; right:.8rem;
     background:none; border:none; color:var(--fog);
@@ -725,12 +749,12 @@
   }
   .footer-social{ display:flex; gap:.6rem; }
   .footer-social a{
-    width:38px; height:38px; border-radius:50%;
+    width:40px; height:40px; border-radius:50%;
     border:1px solid var(--line); background:var(--charcoal-soft);
     display:flex; align-items:center; justify-content:center;
-    font-family:var(--ff-mono); font-size:.68rem; font-weight:500;
     color:var(--bone-dim); transition:border-color .2s, color .2s, background .2s, transform .2s;
   }
+  .footer-social a svg{ width:19px; height:19px; }
   .footer-social a:hover{
     border-color:var(--ember-bright); color:var(--ember-bright);
     background:rgba(227,73,31,.12); transform:translateY(-2px);
@@ -978,6 +1002,18 @@
       <path d="M4 5.5h16v10H9l-4 3.5v-3.5H4Z"/>
       <path d="M8 9.5h8M8 12.5h5"/>
     </symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5"/>
+      <circle cx="12" cy="12" r="4.2"/>
+      <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-tiktok" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+      <path d="M14.5 3h2.3c.2 1.6 1.3 3 3.2 3.3v2.4c-1.2 0-2.3-.4-3.2-1v6.4a5 5 0 1 1-5-5c.2 0 .4 0 .6.03v2.5a2.5 2.5 0 1 0 1.8 2.4V3Z"/>
+    </symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/>
+      <path d="M9 9.3c.2-.5.4-.5.7-.5h.4c.2 0 .4.1.5.4l.5 1.3c.1.2 0 .4-.1.5l-.4.4c-.1.1-.1.3 0 .4.5.9 1.3 1.7 2.2 2.2.1.1.3.1.4 0l.4-.4c.1-.1.3-.2.5-.1l1.3.5c.3.1.4.3.4.5v.4c0 .3-.1.5-.7.7-.5.3-1.2.4-1.9.2-1.6-.4-3.2-2-3.7-3.7-.2-.7-.1-1.4.2-1.9Z"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -1124,10 +1160,9 @@
       </div>
       <p class="footer-blurb">Objetos góticos y de culto para todos los días del año. No es solo una marca, es una declaración — siempre Halloween.</p>
       <div class="footer-social" aria-label="Redes sociales">
-        <a href="https://instagram.com/ghostly.ar" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
-        <a href="https://tiktok.com/@ghostly.ar" target="_blank" rel="noopener" aria-label="TikTok">TT</a>
-        <a href="https://facebook.com/ghostlyargentina" target="_blank" rel="noopener" aria-label="Facebook">FB</a>
-        <a href="https://wa.me/5491112345678" target="_blank" rel="noopener" aria-label="WhatsApp">WA</a>
+        <a href="https://instagram.com/ghostlystore_" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><use href="#i-instagram"/></svg></a>
+        <a href="https://tiktok.com/@ghostly.store" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24"><use href="#i-tiktok"/></svg></a>
+        <a href="https://wa.me/5491133144888" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><use href="#i-whatsapp"/></svg></a>
       </div>
     </div>
 
@@ -1146,19 +1181,19 @@
     <div class="footer-col">
       <h3>Ayuda</h3>
       <ul>
-        <li><button type="button" class="footnav-soon">Preguntas frecuentes</button></li>
-        <li><button type="button" class="footnav-soon">Envíos y entregas</button></li>
-        <li><button type="button" class="footnav-soon">Cambios y devoluciones</button></li>
-        <li><button type="button" class="footnav-soon">Términos y condiciones</button></li>
-        <li><button type="button" class="footnav-soon">Política de privacidad</button></li>
+        <li><button type="button" class="footnav-info" data-info="faq">Preguntas frecuentes</button></li>
+        <li><button type="button" class="footnav-info" data-info="envios">Envíos y entregas</button></li>
+        <li><button type="button" class="footnav-info" data-info="cambios">Cambios y devoluciones</button></li>
+        <li><button type="button" class="footnav-info" data-info="terminos">Términos y condiciones</button></li>
+        <li><button type="button" class="footnav-info" data-info="privacidad">Política de privacidad</button></li>
       </ul>
     </div>
 
     <div class="footer-col">
       <h3>Contacto</h3>
       <ul class="footer-contact">
-        <li><a href="mailto:hola@ghostly.com.ar"><svg viewBox="0 0 24 24"><use href="#i-mail"/></svg>hola@ghostly.com.ar</a></li>
-        <li><a href="https://wa.me/5491112345678" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>+54 9 11 1234-5678</a></li>
+        <li><a href="mailto:ghostlystore@outlook.com"><svg viewBox="0 0 24 24"><use href="#i-mail"/></svg>ghostlystore@outlook.com</a></li>
+        <li><a href="https://wa.me/5491133144888" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>11 3314-4888</a></li>
         <li><span><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg>Lun a Vie, 10 a 18 hs</span></li>
         <li><span><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg>Buenos Aires, Argentina</span></li>
       </ul>
@@ -1170,11 +1205,11 @@
   </div>
 
   <div class="footer-bottom">
-    <span>© 2026 Ghostly · Hecho con 🎃 en Argentina</span>
+    <span>© 2026 Ghostly</span>
     <span class="footer-bottom-links">
-      <button type="button" class="footnav-soon">Términos</button>
+      <button type="button" class="footnav-info" data-info="terminos">Términos</button>
       <span class="footer-dot">·</span>
-      <button type="button" class="footnav-soon">Privacidad</button>
+      <button type="button" class="footnav-info" data-info="privacidad">Privacidad</button>
       <span class="footer-dot">·</span>
       <span>Transferencia y tarjetas de crédito/débito</span>
     </span>
@@ -1272,6 +1307,16 @@
         <button type="button" class="cta-stamp" id="logoutBtn">Cerrar sesión</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ============ INFO MODAL (Ayuda) ============ -->
+<div class="modal-overlay" id="infoOverlay">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="infoModalTitle">
+    <button type="button" class="modal-close" id="closeInfoModal" aria-label="Cerrar">✕</button>
+    <span class="eyebrow">Ayuda</span>
+    <h2 id="infoModalTitle"></h2>
+    <div class="info-modal-body" id="infoModalBody"></div>
   </div>
 </div>
 
@@ -2064,9 +2109,111 @@
   document.querySelectorAll('[data-footnav-cat]').forEach(btn => {
     btn.addEventListener('click', () => showView('catalog', {cat:btn.dataset.footnavCat, query:''}));
   });
-  document.querySelectorAll('.footnav-soon').forEach(btn => {
-    btn.addEventListener('click', () => showToast('Esta sección todavía está en construcción'));
+
+  /* =========================================================
+     INFO MODAL (Ayuda: FAQ, envíos, cambios, términos, privacidad)
+  ========================================================= */
+  // Texto de referencia / borrador — revisalo (sobre todo Términos y
+  // Privacidad) antes de tomarlo como definitivo; no reemplaza asesoría legal.
+  const INFO_PAGES = {
+    faq: {
+      title: "Preguntas frecuentes",
+      html: `
+        <div class="faq-item">
+          <h3>¿Cómo compro en Ghostly?</h3>
+          <p>Elegís tus productos, los agregás al carrito y completás la compra. Te vamos a pedir iniciar sesión antes de confirmar el pedido.</p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Qué métodos de pago aceptan?</h3>
+          <p>Transferencia bancaria (con 10% de descuento) y tarjetas de crédito, hasta 2 cuotas sin interés.</p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Hacen envíos a todo el país?</h3>
+          <p>Sí, enviamos a todo el país. Mirá la sección "Envíos y entregas" para más detalle sobre tiempos y costos.</p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Puedo cambiar o devolver un producto?</h3>
+          <p>Sí, tenés 10 días desde que lo recibís. Mirá "Cambios y devoluciones" para los detalles.</p>
+        </div>
+        <div class="faq-item">
+          <h3>¿Cómo sigo mi pedido?</h3>
+          <p>Te contactamos por WhatsApp o email con la información de seguimiento apenas despachamos tu compra.</p>
+        </div>`
+    },
+    envios: {
+      title: "Envíos y entregas",
+      html: `
+        <p>Hacemos envíos a todo el país. El costo y el tiempo estimado se calculan al finalizar la compra, según tu ubicación.</p>
+        <h3>Tiempos estimados</h3>
+        <ul>
+          <li><strong>CABA y GBA:</strong> 2 a 4 días hábiles.</li>
+          <li><strong>Interior del país:</strong> 5 a 10 días hábiles.</li>
+        </ul>
+        <h3>Seguimiento</h3>
+        <p>Apenas despachamos tu pedido te enviamos el número de seguimiento por email y/o WhatsApp.</p>
+        <h3>¿Algo llegó dañado?</h3>
+        <p>Escribinos apenas lo recibas con fotos del producto y el embalaje, y lo resolvemos.</p>`
+    },
+    cambios: {
+      title: "Cambios y devoluciones",
+      html: `
+        <p>Tenés <strong>10 días corridos</strong> desde que recibís tu pedido para solicitar un cambio o devolución.</p>
+        <h3>Condiciones</h3>
+        <ul>
+          <li>El producto no debe tener uso y debe conservar su embalaje original.</li>
+          <li>Los costos de envío de la devolución corren por cuenta del comprador, salvo error nuestro o producto defectuoso.</li>
+        </ul>
+        <h3>¿Cómo lo pido?</h3>
+        <p>Escribinos por WhatsApp o email con tu número de pedido y coordinamos el cambio o la devolución.</p>`
+    },
+    terminos: {
+      title: "Términos y condiciones",
+      html: `
+        <p>Al comprar en Ghostly aceptás estos términos. Los precios y la disponibilidad de los productos pueden cambiar sin previo aviso.</p>
+        <h3>Productos</h3>
+        <p>Las fotos son ilustrativas; los colores pueden variar levemente respecto al producto real.</p>
+        <h3>Precios y pagos</h3>
+        <p>Los precios se muestran en pesos argentinos (ARS) o dólares (USD) según tu país. El medio de pago elegido puede afectar el precio final (ej. descuento por transferencia).</p>
+        <h3>Propiedad intelectual</h3>
+        <p>El contenido de este sitio (textos, imágenes, logo) pertenece a Ghostly y no puede reproducirse sin autorización.</p>`
+    },
+    privacidad: {
+      title: "Política de privacidad",
+      html: `
+        <p>En Ghostly respetamos tu privacidad. Esta página explica qué datos recolectamos y cómo los usamos.</p>
+        <h3>Qué datos recolectamos</h3>
+        <p>Nombre, email, dirección de envío y datos de contacto, solo cuando los proporcionás (al comprar, suscribirte o contactarnos).</p>
+        <h3>Para qué los usamos</h3>
+        <ul>
+          <li>Procesar y entregar tu pedido.</li>
+          <li>Enviarte novedades, solo si te suscribiste voluntariamente.</li>
+          <li>Responder tus consultas.</li>
+        </ul>
+        <h3>Tus datos no se venden</h3>
+        <p>No compartimos tu información con terceros, salvo lo necesario para el envío (ej. el correo o transporte).</p>
+        <h3>Contacto</h3>
+        <p>Para consultar, corregir o eliminar tus datos, escribinos a <strong>ghostlystore@outlook.com</strong>.</p>`
+    }
+  };
+
+  const infoOverlay = document.getElementById('infoOverlay');
+  function openInfoModal(key){
+    const page = INFO_PAGES[key];
+    if(!page) return;
+    document.getElementById('infoModalTitle').textContent = page.title;
+    document.getElementById('infoModalBody').innerHTML = page.html + (
+      (key === 'terminos' || key === 'privacidad')
+        ? '<p class="info-disclaimer">Este texto es una referencia general y puede necesitar ajustes según tu operatoria — te recomendamos hacerlo revisar antes de considerarlo definitivo.</p>'
+        : ''
+    );
+    infoOverlay.classList.add('is-open');
+  }
+  document.querySelectorAll('.footnav-info').forEach(btn => {
+    btn.addEventListener('click', () => openInfoModal(btn.dataset.info));
   });
+  document.getElementById('closeInfoModal').addEventListener('click', () => infoOverlay.classList.remove('is-open'));
+  infoOverlay.addEventListener('click', (e) => { if(e.target === infoOverlay) infoOverlay.classList.remove('is-open'); });
+
   document.getElementById('footSubscribe').addEventListener('click', () => {
     document.getElementById('openSubscribe').click();
   });
