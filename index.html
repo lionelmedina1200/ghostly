@@ -636,11 +636,13 @@
     border:1px solid var(--line);
     border-radius:3px;
     position:relative;
+    display:flex; flex-direction:column;
+    height:100%;
     transition:transform .25s, border-color .25s;
   }
   .card:hover{ transform:translateY(-4px); border-color:var(--ember-deep); }
   .card-art{
-    height:140px;
+    height:140px; flex:0 0 auto;
     display:flex; align-items:center; justify-content:center;
     border-bottom:1px dashed var(--line);
     position:relative;
@@ -655,7 +657,7 @@
     position:absolute; top:.6rem; left:.6rem;
     font-family:var(--ff-mono); font-size:.62rem; color:var(--fog);
   }
-  .card-body{ padding:.85rem .9rem 1rem; }
+  .card-body{ padding:.85rem .9rem 1rem; display:flex; flex-direction:column; flex:1; }
   .card-cat{ font-family:var(--ff-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.12em; color:var(--fog); }
   .card-title{ font-family:var(--ff-body); font-weight:600; font-size:.92rem; margin:.3rem 0 .5rem; color:var(--bone); }
   .card-rating{ display:flex; align-items:center; gap:.4rem; margin:.3rem 0 .45rem; flex-wrap:wrap; }
@@ -664,7 +666,7 @@
   .card-rating-stars svg.is-filled{ color:var(--ember-bright); }
   .card-rating-num{ font-family:var(--ff-mono); font-weight:500; font-size:.8rem; color:var(--bone); }
   .card-rating-count{ font-family:var(--ff-body); font-size:.75rem; color:var(--bone-dim); }
-  .card-price{ font-family:var(--ff-mono); font-size:.85rem; color:var(--ember-bright); }
+  .card-price{ font-family:var(--ff-mono); font-size:.85rem; color:var(--ember-bright); margin-top:auto; }
   .add-btn{
     margin-top:.65rem; width:100%; font-family:var(--ff-mono); font-size:.66rem;
     letter-spacing:.04em; text-transform:uppercase;
@@ -901,6 +903,18 @@
   }
 
   @media (max-width:680px){
+    .filters{
+      display:grid; grid-template-columns:repeat(3, 1fr);
+      gap:.5rem; justify-content:stretch;
+    }
+    .filters .filter-pill, .filters .filter-pill.is-disabled{
+      flex-direction:column; gap:.35rem;
+      padding:.6rem .3rem .5rem; text-align:center;
+      font-size:.7rem;
+    }
+    .filter-pill-thumb{ width:36px; height:36px; }
+    .filters .soon-tag{ margin-left:0; }
+    .filters .filter-pill:last-child:nth-child(3n+1){ grid-column:2; }
     .topbar-logo span{ display:none; }
     .topbar-inner{ padding:.55rem .85rem; gap:.6rem; }
     .topbar-actions{ gap:.4rem; }
@@ -1719,15 +1733,19 @@
       else if(track.scrollLeft <= 0){ track.scrollLeft += half; }
     });
 
-    // ---- slow continuous auto-scroll ----
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!reduce){
-      function tick(){
-        if(!autoPaused && !isDown){ track.scrollLeft += 0.55; }
-        requestAnimationFrame(tick);
-      }
+    // ---- slow continuous auto-scroll (siempre activo) ----
+    function tick(){
+      if(!autoPaused && !isDown){ track.scrollLeft += 0.55; }
       requestAnimationFrame(tick);
     }
+    requestAnimationFrame(tick);
+
+    // si alguna foto carga después de medir, recalculamos para que el
+    // loop infinito no quede con un ancho viejo/incorrecto
+    window.addEventListener('load', () => {
+      recalcHalf();
+      track.scrollLeft = half;
+    });
   }
 
   /* =========================================================
