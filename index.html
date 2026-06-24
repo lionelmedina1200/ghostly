@@ -102,8 +102,8 @@
   .topbar-logo svg{ width:24px; height:24px; color:var(--ember-bright); }
   .topbar-logo span{ font-family:var(--ff-display); font-weight:700; font-size:1.1rem; color:var(--bone); white-space:nowrap; }
 
+  .search-wrap{ position:relative; flex:1 1 auto; min-width:0; }
   .search-bar{
-    flex:1 1 auto; min-width:0;
     display:flex; align-items:center; gap:.55rem;
     background:var(--charcoal); border:1px solid var(--line); border-radius:999px;
     padding:.6rem 1rem; transition:border-color .2s;
@@ -111,6 +111,40 @@
   .search-bar:focus-within{ border-color:var(--ember); }
   .search-bar svg{ width:18px; height:18px; color:var(--fog); flex:0 0 auto; }
   .search-bar:focus-within svg{ color:var(--ember-bright); }
+  .search-suggest{
+    position:absolute; top:calc(100% + .5rem); left:0; right:0; z-index:55;
+    background:var(--charcoal); border:1px solid var(--line); border-radius:10px;
+    box-shadow:0 14px 30px rgba(0,0,0,.5);
+    overflow:hidden;
+  }
+  .search-suggest[hidden]{ display:none; }
+  .search-suggest-item{
+    display:flex; align-items:center; gap:.7rem;
+    width:100%; padding:.6rem .9rem; background:none; border:none; cursor:pointer;
+    text-align:left; border-bottom:1px solid var(--line);
+  }
+  .search-suggest-item:last-child{ border-bottom:none; }
+  .search-suggest-item:hover{ background:var(--charcoal-soft); }
+  .search-suggest-thumb{
+    width:32px; height:32px; border-radius:6px; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--charcoal-soft); overflow:hidden;
+  }
+  .search-suggest-thumb img{ width:100%; height:100%; object-fit:cover; }
+  .search-suggest-thumb svg{ width:16px; height:16px; color:var(--ember); }
+  .search-suggest-info{ flex:1; min-width:0; }
+  .search-suggest-name{
+    font-family:var(--ff-body); font-weight:600; font-size:.82rem; color:var(--bone);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .search-suggest-price{ font-family:var(--ff-mono); font-size:.72rem; color:var(--ember-bright); }
+  .search-suggest-empty{ padding:.9rem; font-family:var(--ff-body); font-size:.82rem; color:var(--bone-dim); text-align:center; }
+  .search-suggest-viewall{
+    width:100%; padding:.65rem; background:var(--charcoal-soft); border:none; cursor:pointer;
+    font-family:var(--ff-mono); font-size:.7rem; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--ember-bright); text-align:center;
+  }
+  .search-suggest-viewall:hover{ color:#fff; }
   .search-bar input{
     flex:1; min-width:0; background:none; border:none; outline:none;
     color:var(--bone); font-family:var(--ff-body); font-size:.92rem;
@@ -568,6 +602,33 @@
   .qty-btn:hover{ border-color:var(--ember); color:var(--ember-bright); }
   .cart-item-qty span{ font-family:var(--ff-mono); font-size:.85rem; min-width:1.2em; text-align:center; }
   .cart-item-subtotal{ font-family:var(--ff-mono); font-size:.85rem; color:var(--ember-bright); flex:0 0 auto; min-width:64px; text-align:right; }
+  .wishlist-add-cart{
+    font-family:var(--ff-mono); font-size:.66rem; letter-spacing:.03em; text-transform:uppercase;
+    background:var(--ember-deep); color:var(--bone); border:1px solid var(--ember);
+    border-radius:3px; padding:.4rem .7rem; cursor:pointer; transition:background .2s;
+  }
+  .wishlist-add-cart:hover{ background:var(--ember); color:var(--void); }
+
+  .track-timeline{ margin:1.3rem 0; }
+  .track-step{ display:flex; gap:.9rem; position:relative; padding-bottom:1.7rem; }
+  .track-step:last-child{ padding-bottom:0; }
+  .track-step::after{
+    content:""; position:absolute; left:11px; top:24px; bottom:0; width:2px;
+    background:var(--line);
+  }
+  .track-step:last-child::after{ display:none; }
+  .track-step.is-done::after{ background:var(--ember); }
+  .track-dot{
+    width:24px; height:24px; border-radius:50%; flex:0 0 auto;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--charcoal-soft); border:2px solid var(--line); position:relative; z-index:1;
+  }
+  .track-step.is-done .track-dot{ background:var(--ember); border-color:var(--ember-bright); }
+  .track-step.is-current .track-dot{ border-color:var(--ember-bright); box-shadow:0 0 0 4px rgba(227,73,31,.22); }
+  .track-dot svg{ width:12px; height:12px; color:#fff; }
+  .track-step-label{ font-family:var(--ff-body); font-weight:600; font-size:.88rem; color:var(--bone); }
+  .track-step.is-pending .track-step-label{ color:var(--bone-dim); font-weight:500; }
+  .track-step-date{ font-family:var(--ff-mono); font-size:.7rem; color:var(--fog); margin-top:.15rem; }
   .cart-empty{ text-align:center; color:var(--fog); font-family:var(--ff-mono); font-size:.85rem; padding:2rem 0; }
   .cart-empty[hidden]{ display:none; }
   .cart-items[hidden]{ display:none; }
@@ -655,6 +716,17 @@
     position:absolute; top:.6rem; left:.6rem;
     font-family:var(--ff-mono); font-size:.62rem; color:var(--fog);
   }
+  .card-fav{
+    position:absolute; top:.5rem; right:.5rem; z-index:2;
+    width:30px; height:30px; border-radius:50%;
+    background:rgba(10,8,9,.55); border:1px solid rgba(255,255,255,.18);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:background .2s, border-color .2s, transform .15s;
+  }
+  .card-fav svg{ width:15px; height:15px; color:#fff; fill:none; stroke:currentColor; stroke-width:1.6; transition:fill .15s, color .15s; }
+  .card-fav:hover{ transform:scale(1.08); border-color:var(--ember-bright); }
+  .card-fav.is-fav{ background:rgba(227,73,31,.18); border-color:var(--ember-bright); }
+  .card-fav.is-fav svg{ color:var(--ember-bright); fill:var(--ember-bright); }
   .card-body{ padding:.85rem .9rem 1rem; display:flex; flex-direction:column; flex:1; }
   .card-cat{ font-family:var(--ff-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.12em; color:var(--fog); }
   .card-title{ font-family:var(--ff-body); font-weight:600; font-size:.92rem; margin:.3rem 0 .5rem; color:var(--bone); }
@@ -939,7 +1011,8 @@
     .topbar-logo span{ display:none; }
     .topbar-inner{ padding:.55rem .85rem; gap:.6rem; }
     .topbar-actions{ gap:.4rem; }
-    .search-bar{ padding:.45rem .7rem; min-width:70px; }
+    .search-wrap{ min-width:70px; }
+    .search-bar{ padding:.45rem .7rem; }
     .search-bar input{ font-size:.82rem; }
     .action-btn span:not(.count-badge){ display:none; }
     .action-btn{
@@ -1143,6 +1216,9 @@
     <symbol id="i-phone-solid" viewBox="0 0 24 24" fill="currentColor" stroke="none">
       <path d="M7.5 3c-2.2 0-4 1.8-4 4 0 8 6.5 14.5 14.5 14.5 2.2 0 4-1.8 4-4v-1.8c0-.7-.5-1.3-1.1-1.5l-3.8-1.1c-.6-.2-1.2 0-1.6.4l-1 1.1c-2.1-1.1-3.8-2.8-4.9-4.9l1.1-1c.4-.4.6-1 .4-1.6L9.9 4.1C9.7 3.5 9.1 3 8.4 3H7.5Z"/>
     </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12.5 9.5 17 19 7"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -1152,18 +1228,26 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><use href="#i-skull"/></svg>
       <span>GHOSTLY</span>
     </button>
-    <div class="search-bar">
-      <svg viewBox="0 0 24 24"><use href="#i-search"/></svg>
-      <input type="search" id="searchInput" placeholder="Buscá tu producto...">
-      <button type="button" id="searchSubmit" aria-label="Buscar">
+    <div class="search-wrap">
+      <div class="search-bar">
         <svg viewBox="0 0 24 24"><use href="#i-search"/></svg>
-      </button>
+        <input type="search" id="searchInput" placeholder="Buscá tu producto...">
+        <button type="button" id="searchSubmit" aria-label="Buscar">
+          <svg viewBox="0 0 24 24"><use href="#i-search"/></svg>
+        </button>
+      </div>
+      <div class="search-suggest" id="searchSuggest" hidden></div>
     </div>
     <div class="topbar-actions">
       <button class="action-btn" id="btnAccount" aria-label="Iniciar sesión">
         <svg viewBox="0 0 24 24"><use href="#i-user"/></svg>
         <span class="btn-label-full" id="accountBtnLabelFull">Iniciar sesión</span>
         <span class="btn-label-short" id="accountBtnLabelShort">Cuenta</span>
+      </button>
+      <button class="action-btn" id="btnWishlist" aria-label="Favoritos">
+        <svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>
+        <span>Favoritos</span>
+        <span class="count-badge" id="wishlistBadge" hidden>0</span>
       </button>
       <button class="action-btn" id="btnCart" aria-label="Carrito">
         <svg viewBox="0 0 24 24"><use href="#i-cart"/></svg>
@@ -1310,6 +1394,7 @@
     <details class="footer-col footer-acc" open>
       <summary>Ayuda <svg class="footer-acc-chevron" viewBox="0 0 24 24"><use href="#i-chevron"/></svg></summary>
       <ul>
+        <li><button type="button" id="footTrackOrder">Seguir mi pedido</button></li>
         <li><button type="button" class="footnav-info" data-info="faq">Preguntas frecuentes</button></li>
         <li><button type="button" class="footnav-info" data-info="envios">Envíos y entregas</button></li>
         <li><button type="button" class="footnav-info" data-info="cambios">Cambios y devoluciones</button></li>
@@ -1502,6 +1587,43 @@
   </div>
 </div>
 
+<!-- ============ WISHLIST MODAL ============ -->
+<div class="modal-overlay" id="wishlistOverlay">
+  <div class="modal modal-cart" role="dialog" aria-modal="true" aria-labelledby="wishlistTitle">
+    <button type="button" class="modal-close" id="closeWishlistModal" aria-label="Cerrar">✕</button>
+    <h2 id="wishlistTitle">Tus favoritos</h2>
+    <p class="cart-empty" id="wishlistEmptyMsg">Todavía no guardaste nada. Tocá el corazón de un producto para guardarlo acá.</p>
+    <div class="cart-items" id="wishlistItems" hidden></div>
+  </div>
+</div>
+
+<!-- ============ ORDER TRACKING MODAL ============ -->
+<div class="modal-overlay" id="trackOverlay">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="trackTitle">
+    <button type="button" class="modal-close" id="closeTrackModal" aria-label="Cerrar">✕</button>
+    <h2 id="trackTitle">Seguí tu pedido</h2>
+
+    <div id="trackForm">
+      <p class="account-note" style="margin-top:0;">Ingresá tu número de pedido (te lo enviamos por email cuando compraste) para ver el estado del envío.</p>
+      <div class="modal-field">
+        <label for="trackOrderNum">Número de pedido</label>
+        <input type="text" id="trackOrderNum" placeholder="Ej: GH-10234">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="cta-stamp" id="trackSubmit" style="width:100%;">Buscar pedido</button>
+      </div>
+    </div>
+
+    <div id="trackResult" hidden>
+      <p class="account-note" style="margin-top:0;">Pedido <strong id="trackResultNum" style="color:var(--ember-bright);"></strong></p>
+      <div class="track-timeline" id="trackTimeline"></div>
+      <div class="modal-actions">
+        <button type="button" class="cta-stamp" id="trackAnother" style="width:100%;">Buscar otro pedido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <a class="whatsapp-float" href="https://wa.me/5491133144888" target="_blank" rel="noopener" aria-label="Chatear por WhatsApp">
   <svg viewBox="0 0 24 24"><use href="#i-phone-solid"/></svg>
 </a>
@@ -1523,6 +1645,7 @@
     catalogSubcat: 'todas',
     catalogQuery: '',
     subscribed: false,
+    wishlist: [],
     subscribedEmail: null
   };
   const USD_RATE = 1000; // placeholder exchange rate ARS -> USD, replace with a real rate later
@@ -1809,10 +1932,14 @@
 
   function cardHTML(p, no){
     const icon = ICONS[p.cat] || "i-frame";
+    const isFav = state.wishlist.includes(p.id);
     return `
       <article class="card" data-id="${p.id}">
         <div class="card-art">
           <span class="card-pin">No. ${no}</span>
+          <button type="button" class="card-fav${isFav ? ' is-fav' : ''}" data-id="${p.id}" aria-label="Favorito">
+            <svg viewBox="0 0 24 24"><use href="#i-heart"/></svg>
+          </button>
           ${splatterHTML(p.id)}
           <svg viewBox="0 0 24 24"><use href="#${icon}"/></svg>
         </div>
@@ -1915,6 +2042,90 @@
     btn.classList.add('is-added');
     setTimeout(() => { btn.textContent = original; btn.classList.remove('is-added'); }, 900);
   });
+
+  /* delegated favorito (heart) clicks — covers home + catalog cards */
+  document.body.addEventListener('click', (e) => {
+    const favBtn = e.target.closest('.card-fav');
+    if(!favBtn) return;
+    toggleWishlist(favBtn.dataset.id);
+  });
+
+  /* =========================================================
+     WISHLIST (favoritos)
+  ========================================================= */
+  function toggleWishlist(id){
+    const p = PRODUCTS_BY_ID[id];
+    if(!p) return;
+    const idx = state.wishlist.indexOf(id);
+    if(idx >= 0){
+      state.wishlist.splice(idx, 1);
+      showToast(`${p.name} se quitó de favoritos`);
+    } else {
+      state.wishlist.push(id);
+      showToast(`${p.name} se guardó en favoritos 🖤`);
+    }
+    document.querySelectorAll(`.card-fav[data-id="${id}"]`).forEach(btn => {
+      btn.classList.toggle('is-fav', state.wishlist.includes(id));
+    });
+    updateWishlistBadge();
+    renderWishlist();
+  }
+
+  function updateWishlistBadge(){
+    const badge = document.getElementById('wishlistBadge');
+    const count = state.wishlist.length;
+    badge.textContent = count;
+    badge.hidden = count === 0;
+  }
+
+  function renderWishlist(){
+    const itemsWrap = document.getElementById('wishlistItems');
+    const emptyMsg = document.getElementById('wishlistEmptyMsg');
+
+    if(state.wishlist.length === 0){
+      itemsWrap.hidden = true;
+      emptyMsg.hidden = false;
+      itemsWrap.innerHTML = '';
+      return;
+    }
+    emptyMsg.hidden = true;
+    itemsWrap.hidden = false;
+
+    itemsWrap.innerHTML = state.wishlist.map(id => {
+      const p = PRODUCTS_BY_ID[id];
+      if(!p) return '';
+      const icon = ICONS[p.cat] || "i-frame";
+      return `
+        <div class="cart-item" data-id="${p.id}">
+          <div class="cart-item-top">
+            <div class="cart-item-icon"><svg viewBox="0 0 24 24"><use href="#${icon}"/></svg></div>
+            <div class="cart-item-name">${p.name}</div>
+            <button type="button" class="cart-item-remove" data-id="${p.id}" aria-label="Quitar ${p.name} de favoritos">
+              <svg viewBox="0 0 24 24"><use href="#i-trash"/></svg>
+            </button>
+          </div>
+          <div class="cart-item-meta">
+            <span class="cart-item-price">${formatPrice(p.priceArs)}</span>
+            <button type="button" class="wishlist-add-cart" data-id="${p.id}">Agregar al carrito</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    itemsWrap.querySelectorAll('.cart-item-remove').forEach(btn => {
+      btn.addEventListener('click', () => toggleWishlist(btn.dataset.id));
+    });
+    itemsWrap.querySelectorAll('.wishlist-add-cart').forEach(btn => {
+      btn.addEventListener('click', () => addToCart(btn.dataset.id));
+    });
+  }
+
+  const wishlistOverlay = document.getElementById('wishlistOverlay');
+  document.getElementById('btnWishlist').addEventListener('click', () => {
+    renderWishlist();
+    wishlistOverlay.classList.add('is-open');
+  });
+  document.getElementById('closeWishlistModal').addEventListener('click', () => wishlistOverlay.classList.remove('is-open'));
+  wishlistOverlay.addEventListener('click', (e) => { if(e.target === wishlistOverlay) wishlistOverlay.classList.remove('is-open'); });
 
   /* =========================================================
      CART
@@ -2052,13 +2263,62 @@
      SEARCH
   ========================================================= */
   const searchInput = document.getElementById('searchInput');
+  const searchSuggest = document.getElementById('searchSuggest');
 
-  function runSearch(){
-    const q = searchInput.value.trim();
-    showView('catalog', {cat:'todos', query:q});
+  function runSearch(q){
+    searchSuggest.hidden = true;
+    showView('catalog', {cat:'todos', query: q !== undefined ? q : searchInput.value.trim()});
   }
-  document.getElementById('searchSubmit').addEventListener('click', runSearch);
+  document.getElementById('searchSubmit').addEventListener('click', () => runSearch());
   searchInput.addEventListener('keydown', (e) => { if(e.key === 'Enter') runSearch(); });
+
+  function renderSearchSuggest(){
+    const q = searchInput.value.trim().toLowerCase();
+    if(!q){ searchSuggest.hidden = true; return; }
+    const matches = PRODUCTS.filter(p =>
+      p.name.toLowerCase().includes(q) || p.catLabel.toLowerCase().includes(q)
+    ).slice(0, 5);
+
+    if(matches.length === 0){
+      searchSuggest.innerHTML = `<div class="search-suggest-empty">No encontramos nada con "${q}"</div>`;
+      searchSuggest.hidden = false;
+      return;
+    }
+
+    const itemsHTML = matches.map(p => {
+      const photo = CATEGORY_IMAGES[p.cat];
+      const icon = ICONS[p.cat] || "i-frame";
+      const thumb = photo
+        ? `<span class="search-suggest-thumb"><img src="${photo}" alt=""></span>`
+        : `<span class="search-suggest-thumb"><svg viewBox="0 0 24 24"><use href="#${icon}"/></svg></span>`;
+      return `
+        <button type="button" class="search-suggest-item" data-id="${p.id}">
+          ${thumb}
+          <span class="search-suggest-info">
+            <span class="search-suggest-name">${p.name}</span><br>
+            <span class="search-suggest-price">${formatPrice(p.priceArs)}</span>
+          </span>
+        </button>`;
+    }).join('');
+
+    searchSuggest.innerHTML = itemsHTML + `<button type="button" class="search-suggest-viewall">Ver todos los resultados</button>`;
+    searchSuggest.hidden = false;
+
+    searchSuggest.querySelectorAll('.search-suggest-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = PRODUCTS_BY_ID[btn.dataset.id];
+        searchInput.value = p.name;
+        runSearch(p.name);
+      });
+    });
+    searchSuggest.querySelector('.search-suggest-viewall').addEventListener('click', () => runSearch());
+  }
+
+  searchInput.addEventListener('input', renderSearchSuggest);
+  searchInput.addEventListener('focus', () => { if(searchInput.value.trim()) renderSearchSuggest(); });
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('.search-wrap')) searchSuggest.hidden = true;
+  });
 
   /* =========================================================
      ACCOUNT / LOGIN
@@ -2393,6 +2653,78 @@
   });
 
   /* =========================================================
+     ORDER TRACKING (demo — no hay pedidos reales todavía, esto
+     genera una línea de tiempo de muestra a partir del número
+     que se ingrese, siempre la misma para el mismo número)
+  ========================================================= */
+  const TRACK_STAGES = ["Pedido confirmado", "Preparando tu pedido", "Enviado", "En camino", "Entregado"];
+
+  function generateTrackDemo(orderNum){
+    let hash = 0;
+    for(let i=0; i<orderNum.length; i++) hash = (hash * 31 + orderNum.charCodeAt(i)) >>> 0;
+    const currentIdx = hash % TRACK_STAGES.length;
+    const today = new Date();
+    return TRACK_STAGES.map((label, i) => {
+      const status = i < currentIdx ? 'done' : (i === currentIdx ? 'current' : 'pending');
+      let dateStr = '';
+      if(status !== 'pending'){
+        const d = new Date(today);
+        d.setDate(d.getDate() - Math.round((currentIdx - i) * 1.5));
+        dateStr = d.toLocaleDateString('es-AR', {day:'numeric', month:'short'});
+      }
+      return {label, status, dateStr};
+    });
+  }
+
+  function trackStepHTML(step){
+    const dotContent = step.status === 'done'
+      ? `<svg viewBox="0 0 24 24"><use href="#i-check"/></svg>`
+      : step.status === 'current'
+        ? `<svg viewBox="0 0 24 24"><use href="#i-truck"/></svg>`
+        : '';
+    return `
+      <div class="track-step is-${step.status}">
+        <div class="track-dot">${dotContent}</div>
+        <div>
+          <div class="track-step-label">${step.label}</div>
+          ${step.dateStr ? `<div class="track-step-date">${step.dateStr}</div>` : ''}
+        </div>
+      </div>`;
+  }
+
+  const trackOverlay = document.getElementById('trackOverlay');
+  const trackForm = document.getElementById('trackForm');
+  const trackResult = document.getElementById('trackResult');
+
+  function openTrackModal(){
+    trackForm.hidden = false;
+    trackResult.hidden = true;
+    document.getElementById('trackOrderNum').value = '';
+    trackOverlay.classList.add('is-open');
+  }
+  document.getElementById('footTrackOrder').addEventListener('click', openTrackModal);
+  document.getElementById('closeTrackModal').addEventListener('click', () => trackOverlay.classList.remove('is-open'));
+  trackOverlay.addEventListener('click', (e) => { if(e.target === trackOverlay) trackOverlay.classList.remove('is-open'); });
+
+  document.getElementById('trackSubmit').addEventListener('click', () => {
+    const num = document.getElementById('trackOrderNum').value.trim();
+    if(!num){ showToast('Ingresá un número de pedido'); return; }
+    const steps = generateTrackDemo(num);
+    document.getElementById('trackResultNum').textContent = num;
+    document.getElementById('trackTimeline').innerHTML = steps.map(trackStepHTML).join('');
+    trackForm.hidden = true;
+    trackResult.hidden = false;
+  });
+  document.getElementById('trackOrderNum').addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') document.getElementById('trackSubmit').click();
+  });
+  document.getElementById('trackAnother').addEventListener('click', () => {
+    trackForm.hidden = false;
+    trackResult.hidden = true;
+    document.getElementById('trackOrderNum').value = '';
+  });
+
+  /* =========================================================
      HERO OFFER SLIDES (one banner; "ofertas" + "novedades" all
      live in the SAME rotation — alternates auto + manual arrows)
   ========================================================= */
@@ -2580,6 +2912,7 @@
   renderHomeRows();
   renderCatalog();
   updateCartBadge();
+  updateWishlistBadge();
   updateAccountButton();
   updateSubscribeButton();
   syncTopbarHeight();
