@@ -474,6 +474,7 @@
     border:1px solid var(--ember-bright);
     padding:.75rem 1.4rem; border-radius:2px;
     cursor:pointer; white-space:nowrap;
+    max-width:100%; overflow:hidden; text-overflow:ellipsis;
     display:inline-flex; align-items:center; gap:.4rem;
     transition:background .2s, transform .2s;
   }
@@ -534,6 +535,7 @@
     font-family:var(--ff-display); font-size:1.4rem; margin:.3rem 0 1.1rem;
   }
   .modal-field{ display:flex; flex-direction:column; gap:.4rem; margin-bottom:.9rem; }
+  .modal-field[hidden]{ display:none; }
   .modal-field label{
     font-family:var(--ff-mono); font-size:.66rem; letter-spacing:.08em;
     text-transform:uppercase; color:var(--bone-dim);
@@ -641,6 +643,21 @@
   .cart-summary[hidden]{ display:none; }
   #cartTotal{ color:var(--ember-bright); font-size:1.2rem; letter-spacing:0; }
   .currency-note{ font-size:.64rem; color:var(--fog); margin:.4rem 0 0; font-family:var(--ff-mono); }
+  .address-summary{
+    margin-top:.9rem; padding:.8rem .9rem;
+    background:var(--charcoal-soft); border:1px solid var(--line); border-radius:8px;
+  }
+  .address-summary[hidden]{ display:none; }
+  .address-summary-label{
+    display:block; font-family:var(--ff-mono); font-size:.62rem; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--ember); margin-bottom:.3rem;
+  }
+  .address-summary p{ margin:0 0 .5rem; font-family:var(--ff-body); font-size:.82rem; color:var(--bone-dim); line-height:1.4; }
+  .address-summary button{
+    font-family:var(--ff-mono); font-size:.68rem; letter-spacing:.03em;
+    color:var(--ember-bright); background:none; border:none; padding:0; cursor:pointer; text-decoration:underline;
+  }
+  .address-summary button:hover{ color:#fff; }
 
   /* ---------- toast ---------- */
   .whatsapp-float{
@@ -1120,9 +1137,6 @@
     <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 20s-7-4.4-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 5c-2.5 4.6-9.5 9-9.5 9Z"/>
     </symbol>
-    <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2.5 14 9h6.5l-5.3 4 2 6.5L12 15.8 6.8 19.5l2-6.5-5.3-4H10Z"/>
-    </symbol>
     <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M16 3a9 9 0 1 0 0 18 7 7 0 1 1 0-18Z"/>
     </symbol>
@@ -1443,16 +1457,29 @@
         <select id="countrySelect">
           <option value="">Seleccioná un país</option>
           <option>Argentina</option>
-          <option>Brasil</option>
+          <option>México</option>
+          <option>España</option>
+          <option>Estados Unidos</option>
           <option>Chile</option>
           <option>Colombia</option>
-          <option>Costa Rica</option>
-          <option>España</option>
-          <option>México</option>
           <option>Perú</option>
-          <option>Estados Unidos</option>
           <option>Uruguay</option>
+          <option>Brasil</option>
+          <option>Paraguay</option>
+          <option>Bolivia</option>
+          <option>Ecuador</option>
+          <option>Venezuela</option>
+          <option>Costa Rica</option>
+          <option>Panamá</option>
+          <option>Guatemala</option>
+          <option>República Dominicana</option>
+          <option>Canadá</option>
+          <option value="Otro">Otro país</option>
         </select>
+      </div>
+      <div class="modal-field" id="otherCountryField" hidden>
+        <label for="otherCountryInput">Especificá tu país</label>
+        <input type="text" id="otherCountryInput" placeholder="Escribí tu país">
       </div>
       <div class="modal-actions">
         <button type="button" class="cta-stamp" id="toStepAddress" disabled>Continuar</button>
@@ -1469,6 +1496,10 @@
       <div class="modal-field">
         <label for="addrCity">Ciudad</label>
         <input type="text" id="addrCity" placeholder="Ej: Castelar">
+      </div>
+      <div class="modal-field">
+        <label for="addrState" id="addrStateLabel">Provincia / Estado</label>
+        <input type="text" id="addrState" placeholder="Ej: Buenos Aires">
       </div>
       <div class="modal-field">
         <label for="addrZip">Código postal</label>
@@ -1581,6 +1612,11 @@
       <span id="cartTotal">$0</span>
     </div>
     <p class="currency-note" id="currencyNote" hidden></p>
+    <div class="address-summary" id="addressSummary" hidden>
+      <span class="address-summary-label">Enviar a</span>
+      <p id="addressSummaryText"></p>
+      <button type="button" id="editAddressBtn">Editar dirección</button>
+    </div>
     <div class="modal-actions" id="cartCheckoutWrap" hidden>
       <button type="button" class="cta-stamp" id="cartCheckoutBtn" style="width:100%;">Comprar</button>
     </div>
@@ -1646,6 +1682,7 @@
     catalogQuery: '',
     subscribed: false,
     wishlist: [],
+    address: null, // {street, city, state, zip, country}
     subscribedEmail: null
   };
   const USD_RATE = 1000; // placeholder exchange rate ARS -> USD, replace with a real rate later
@@ -2221,7 +2258,21 @@
     } else {
       note.hidden = true;
     }
+    renderAddressSummary();
   }
+
+  function renderAddressSummary(){
+    const wrap = document.getElementById('addressSummary');
+    if(!state.address){ wrap.hidden = true; return; }
+    const a = state.address;
+    const parts = [a.street, a.city, a.state, a.country].filter(Boolean).join(', ');
+    document.getElementById('addressSummaryText').textContent = a.zip ? `${parts} (CP ${a.zip})` : parts;
+    wrap.hidden = false;
+  }
+  document.getElementById('editAddressBtn').addEventListener('click', () => {
+    cartOverlay.classList.remove('is-open');
+    window.__openShippingAtAddress();
+  });
 
   document.getElementById('cartItems').addEventListener('click', (e) => {
     const qtyBtn = e.target.closest('.qty-btn');
@@ -2478,41 +2529,102 @@
   });
 
   /* =========================================================
-     SHIPPING / COUNTRY MODAL (sets currency)
+     SHIPPING / COUNTRY MODAL (sets currency + saves the address)
   ========================================================= */
   (function(){
     const overlay = document.getElementById('shipModalOverlay');
     const steps = overlay.querySelectorAll('.modal-step');
     const countrySelect = document.getElementById('countrySelect');
+    const otherCountryField = document.getElementById('otherCountryField');
+    const otherCountryInput = document.getElementById('otherCountryInput');
     const toStepAddress = document.getElementById('toStepAddress');
     const saveAddress = document.getElementById('saveAddress');
     const addrStreet = document.getElementById('addrStreet');
     const addrCity = document.getElementById('addrCity');
+    const addrState = document.getElementById('addrState');
     const addrZip = document.getElementById('addrZip');
+    const addrStateLabel = document.getElementById('addrStateLabel');
+
+    // Etiqueta del campo "provincia/estado" según el país — si el país
+    // elegido no está en este mapa, se queda con el texto genérico.
+    const STATE_FIELD_LABEL = {
+      "Argentina": "Provincia", "Uruguay": "Departamento", "Chile": "Región",
+      "Colombia": "Departamento", "Perú": "Región", "México": "Estado",
+      "Costa Rica": "Provincia", "España": "Provincia / Comunidad autónoma",
+      "Estados Unidos": "Estado", "Brasil": "Estado", "Paraguay": "Departamento",
+      "Bolivia": "Departamento", "Ecuador": "Provincia", "Venezuela": "Estado",
+      "Panamá": "Provincia", "Guatemala": "Departamento",
+      "República Dominicana": "Provincia", "Canadá": "Provincia / Territorio"
+    };
+
+    // Sugerencia automática de país a partir del idioma del navegador —
+    // es solo una sugerencia inicial, la persona la puede cambiar igual.
+    const LOCALE_COUNTRY_GUESS = {
+      "AR":"Argentina", "MX":"México", "ES":"España", "US":"Estados Unidos",
+      "CL":"Chile", "CO":"Colombia", "PE":"Perú", "UY":"Uruguay", "BR":"Brasil",
+      "PY":"Paraguay", "BO":"Bolivia", "EC":"Ecuador", "VE":"Venezuela",
+      "CR":"Costa Rica", "PA":"Panamá", "GT":"Guatemala", "DO":"República Dominicana",
+      "CA":"Canadá"
+    };
+    function guessCountryFromLocale(){
+      try{
+        const locales = navigator.languages || [navigator.language];
+        for(const loc of locales){
+          const region = loc.split('-')[1];
+          if(region && LOCALE_COUNTRY_GUESS[region.toUpperCase()]) return LOCALE_COUNTRY_GUESS[region.toUpperCase()];
+        }
+      } catch(err){}
+      return null;
+    }
 
     function showStep(name){
       steps.forEach(s => s.hidden = s.dataset.step !== name);
     }
-    function openModal(){
+
+    function openModal(startStep){
       overlay.classList.add('is-open');
-      showStep('country');
+      if(state.country){
+        countrySelect.value = countrySelect.querySelector(`option[value="${state.country}"]`) ? state.country : 'Otro';
+        if(countrySelect.value === 'Otro'){
+          otherCountryField.hidden = false;
+          otherCountryInput.value = state.country;
+        }
+      } else {
+        const guess = guessCountryFromLocale();
+        if(guess && countrySelect.querySelector(`option[value="${guess}"]`)) countrySelect.value = guess;
+      }
+      toStepAddress.disabled = !countrySelect.value;
+      if(state.address){
+        addrStreet.value = state.address.street || '';
+        addrCity.value = state.address.city || '';
+        addrState.value = state.address.state || '';
+        addrZip.value = state.address.zip || '';
+      }
+      checkAddressFields();
+      showStep(startStep || 'country');
     }
     function closeModal(){
       overlay.classList.remove('is-open');
     }
 
-    document.getElementById('openShipping').addEventListener('click', openModal);
+    document.getElementById('openShipping').addEventListener('click', () => openModal('country'));
     document.getElementById('closeShipModal').addEventListener('click', closeModal);
     overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
 
     countrySelect.addEventListener('change', () => {
-      toStepAddress.disabled = !countrySelect.value;
+      otherCountryField.hidden = countrySelect.value !== 'Otro';
+      toStepAddress.disabled = !countrySelect.value || (countrySelect.value === 'Otro' && !otherCountryInput.value.trim());
+    });
+    otherCountryInput.addEventListener('input', () => {
+      toStepAddress.disabled = !otherCountryInput.value.trim();
     });
 
     toStepAddress.addEventListener('click', () => {
-      state.country = countrySelect.value;
+      state.country = countrySelect.value === 'Otro' ? otherCountryInput.value.trim() : countrySelect.value;
       state.currency = (state.country === 'Argentina') ? 'ARS' : 'USD';
+      addrStateLabel.textContent = STATE_FIELD_LABEL[state.country] || 'Provincia / Estado';
       renderAllPrices();
+      updateShipButton();
       showStep('address');
     });
     document.getElementById('backToCountry').addEventListener('click', () => showStep('country'));
@@ -2520,9 +2632,17 @@
     function checkAddressFields(){
       saveAddress.disabled = !(addrStreet.value.trim() && addrCity.value.trim() && addrZip.value.trim());
     }
-    [addrStreet, addrCity, addrZip].forEach(el => el.addEventListener('input', checkAddressFields));
+    [addrStreet, addrCity, addrState, addrZip].forEach(el => el.addEventListener('input', checkAddressFields));
 
     saveAddress.addEventListener('click', () => {
+      state.address = {
+        street: addrStreet.value.trim(),
+        city: addrCity.value.trim(),
+        state: addrState.value.trim(),
+        zip: addrZip.value.trim(),
+        country: state.country
+      };
+      renderAddressSummary();
       const currencyLabel = state.currency === 'USD' ? 'dólares (USD)' : 'pesos argentinos (ARS)';
       document.getElementById('doneMessage').innerHTML =
         `Vamos a mostrarte precios y costos de envío para <strong style="color:var(--ember-bright)">${state.country}</strong>, en ${currencyLabel}.`;
@@ -2530,6 +2650,16 @@
     });
 
     document.getElementById('closeDone').addEventListener('click', closeModal);
+
+    /* abrir directo en "editar dirección" desde el carrito */
+    window.__openShippingAtAddress = () => openModal(state.country ? 'address' : 'country');
+
+    /* botón "Ir a mi país" refleja la elección actual */
+    window.updateShipButton = function updateShipButton(){
+      const btn = document.getElementById('openShipping');
+      btn.textContent = state.country ? `🌍 ${state.country}` : '🌍 Ir a mi país';
+    };
+    updateShipButton();
   })();
 
   /* =========================================================
