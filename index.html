@@ -536,6 +536,30 @@
   }
   .modal-field{ display:flex; flex-direction:column; gap:.4rem; margin-bottom:.9rem; }
   .modal-field[hidden]{ display:none; }
+  .modal-field-row{ display:flex; gap:.8rem; }
+  .modal-field-row .modal-field{ flex:1; min-width:0; }
+  .payment-tabs{ display:flex; gap:.6rem; margin:1rem 0 1.2rem; }
+  .payment-tab{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:.5rem;
+    padding:.7rem .5rem; border:1.5px solid var(--line); border-radius:8px;
+    background:var(--charcoal-soft); color:var(--bone-dim); cursor:pointer;
+    font-family:var(--ff-body); font-weight:600; font-size:.85rem;
+    transition:border-color .2s, color .2s, background .2s;
+  }
+  .payment-tab svg{ width:17px; height:17px; flex:0 0 auto; }
+  .payment-tab.is-active{ border-color:var(--ember-bright); color:#fff; background:rgba(227,73,31,.15); }
+  .payment-bank-details{
+    background:var(--charcoal-soft); border:1px solid var(--line); border-radius:8px;
+    padding:.9rem; margin-bottom:.6rem;
+  }
+  .payment-bank-details div{
+    display:flex; justify-content:space-between; gap:.6rem;
+    padding:.4rem 0; border-bottom:1px solid var(--line);
+    font-family:var(--ff-body); font-size:.85rem;
+  }
+  .payment-bank-details div:last-child{ border-bottom:none; }
+  .payment-bank-details span{ color:var(--bone-dim); }
+  .payment-bank-details strong{ color:var(--bone); font-family:var(--ff-mono); font-size:.8rem; word-break:break-all; }
   .modal-field label{
     font-family:var(--ff-mono); font-size:.66rem; letter-spacing:.08em;
     text-transform:uppercase; color:var(--bone-dim);
@@ -1633,6 +1657,60 @@
   </div>
 </div>
 
+<!-- ============ PAYMENT MODAL ============ -->
+<div class="modal-overlay" id="paymentOverlay">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="paymentTitle">
+    <button type="button" class="modal-close" id="closePaymentModal" aria-label="Cerrar">✕</button>
+    <h2 id="paymentTitle">Método de pago</h2>
+    <p class="account-note" style="margin-top:0;">Total a pagar: <strong id="paymentTotal" style="color:var(--ember-bright);"></strong></p>
+
+    <div class="payment-tabs">
+      <button type="button" class="payment-tab is-active" data-method="transferencia">
+        <svg viewBox="0 0 24 24"><use href="#i-cash"/></svg>Transferencia
+      </button>
+      <button type="button" class="payment-tab" data-method="tarjeta">
+        <svg viewBox="0 0 24 24"><use href="#i-card"/></svg>Tarjeta
+      </button>
+    </div>
+
+    <div id="paymentTransferPane">
+      <p class="account-note" style="margin-top:0;">Transferí el total a:</p>
+      <div class="payment-bank-details">
+        <div><span>Alias</span><strong>ghostly.store</strong></div>
+        <div><span>CBU</span><strong>0000003100000000000000</strong></div>
+        <div><span>Banco</span><strong>Banco Demo</strong></div>
+      </div>
+      <p class="info-disclaimer">Estos datos son de muestra — reemplazalos por tus datos bancarios reales antes de publicar el sitio.</p>
+    </div>
+
+    <div id="paymentCardPane" hidden>
+      <div class="modal-field">
+        <label for="cardNumber">Número de tarjeta</label>
+        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" maxlength="19">
+      </div>
+      <div class="modal-field-row">
+        <div class="modal-field">
+          <label for="cardExpiry">Vencimiento</label>
+          <input type="text" id="cardExpiry" placeholder="MM/AA" inputmode="numeric" maxlength="5">
+        </div>
+        <div class="modal-field">
+          <label for="cardCvv">CVV</label>
+          <input type="text" id="cardCvv" placeholder="123" inputmode="numeric" maxlength="4">
+        </div>
+      </div>
+      <div class="modal-field">
+        <label for="cardName">Nombre del titular</label>
+        <input type="text" id="cardName" placeholder="Como figura en la tarjeta">
+      </div>
+      <p class="info-disclaimer">Esto todavía no procesa pagos reales — falta conectar una pasarela como Mercado Pago o Stripe.</p>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="cta-stamp" id="confirmPayment" style="width:100%;">Confirmar compra</button>
+    </div>
+  </div>
+</div>
+
 <!-- ============ ORDER TRACKING MODAL ============ -->
 <div class="modal-overlay" id="trackOverlay">
   <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="trackTitle">
@@ -2290,25 +2368,94 @@
   document.getElementById('closeCartModal').addEventListener('click', () => cartOverlay.classList.remove('is-open'));
   cartOverlay.addEventListener('click', (e) => { if(e.target === cartOverlay) cartOverlay.classList.remove('is-open'); });
 
-  /* checkout button -> requires login */
-  document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
+  /* checkout button -> requires login, then address, then payment method */
+  function proceedToCheckout(){
     if(!state.user){
       state.pendingCheckout = true;
       cartOverlay.classList.remove('is-open');
       openAccountModal({requireLogin:true});
       return;
     }
-    completePurchase();
-  });
+    if(!state.address){
+      state.pendingCheckout = true;
+      cartOverlay.classList.remove('is-open');
+      showToast('Antes de comprar necesitamos tu dirección de envío');
+      window.__openShippingAtAddress();
+      return;
+    }
+    cartOverlay.classList.remove('is-open');
+    openPaymentModal();
+  }
+  document.getElementById('cartCheckoutBtn').addEventListener('click', proceedToCheckout);
 
-  function completePurchase(){
+  function completePurchase(method){
     const total = formatPrice(cartTotalArs());
-    showToast(`¡Compra realizada! Total: ${total}`);
+    const methodLabel = method === 'tarjeta' ? 'con tarjeta' : 'por transferencia';
+    showToast(`¡Compra realizada ${methodLabel}! Total: ${total}`);
     state.cart = [];
+    state.pendingCheckout = false;
     updateCartBadge();
     renderCart();
     cartOverlay.classList.remove('is-open');
   }
+
+  /* =========================================================
+     PAYMENT MODAL (método de pago — todavía no procesa pagos
+     reales, falta conectar una pasarela como Mercado Pago/Stripe)
+  ========================================================= */
+  function openPaymentModal(){
+    document.getElementById('paymentTotal').textContent = formatPrice(cartTotalArs());
+    document.getElementById('paymentOverlay').classList.add('is-open');
+  }
+
+  (function(){
+    const overlay = document.getElementById('paymentOverlay');
+    const tabs = overlay.querySelectorAll('.payment-tab');
+    const transferPane = document.getElementById('paymentTransferPane');
+    const cardPane = document.getElementById('paymentCardPane');
+    const cardNumber = document.getElementById('cardNumber');
+    const cardExpiry = document.getElementById('cardExpiry');
+    let currentMethod = 'transferencia';
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        currentMethod = tab.dataset.method;
+        transferPane.hidden = currentMethod !== 'transferencia';
+        cardPane.hidden = currentMethod !== 'tarjeta';
+      });
+    });
+
+    /* formateo liviano mientras se escribe */
+    cardNumber.addEventListener('input', () => {
+      cardNumber.value = cardNumber.value.replace(/[^\d]/g, '').slice(0,16).replace(/(.{4})/g, '$1 ').trim();
+    });
+    cardExpiry.addEventListener('input', () => {
+      let v = cardExpiry.value.replace(/[^\d]/g, '').slice(0,4);
+      if(v.length > 2) v = v.slice(0,2) + '/' + v.slice(2);
+      cardExpiry.value = v;
+    });
+
+    function closePaymentModal(){ overlay.classList.remove('is-open'); }
+    document.getElementById('closePaymentModal').addEventListener('click', closePaymentModal);
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closePaymentModal(); });
+
+    document.getElementById('confirmPayment').addEventListener('click', () => {
+      if(currentMethod === 'tarjeta'){
+        const num = cardNumber.value.replace(/\s/g, '');
+        const exp = cardExpiry.value.trim();
+        const cvv = document.getElementById('cardCvv').value.trim();
+        const name = document.getElementById('cardName').value.trim();
+        if(num.length < 13){ showToast('Revisá el número de tarjeta'); return; }
+        if(!/^\d{2}\/\d{2}$/.test(exp)){ showToast('Vencimiento en formato MM/AA'); return; }
+        if(cvv.length < 3){ showToast('CVV inválido'); return; }
+        if(!name){ showToast('Falta el nombre del titular'); return; }
+      }
+      closePaymentModal();
+      completePurchase(currentMethod);
+    });
+  })();
 
   /* =========================================================
      SEARCH
@@ -2402,8 +2549,7 @@
     accountOverlay.classList.remove('is-open');
     showToast(`Sesión iniciada como ${email}`);
     if(state.pendingCheckout){
-      state.pendingCheckout = false;
-      completePurchase();
+      proceedToCheckout();
     }
   }
 
@@ -2644,12 +2790,23 @@
       };
       renderAddressSummary();
       const currencyLabel = state.currency === 'USD' ? 'dólares (USD)' : 'pesos argentinos (ARS)';
-      document.getElementById('doneMessage').innerHTML =
-        `Vamos a mostrarte precios y costos de envío para <strong style="color:var(--ember-bright)">${state.country}</strong>, en ${currencyLabel}.`;
+      const closeDoneBtn = document.getElementById('closeDone');
+      if(state.pendingCheckout){
+        document.getElementById('doneMessage').innerHTML =
+          `Guardamos tu dirección en <strong style="color:var(--ember-bright)">${state.country}</strong>. Ahora sí, vamos a completar tu compra.`;
+        closeDoneBtn.textContent = 'Continuar con el pago';
+      } else {
+        document.getElementById('doneMessage').innerHTML =
+          `Vamos a mostrarte precios y costos de envío para <strong style="color:var(--ember-bright)">${state.country}</strong>, en ${currencyLabel}.`;
+        closeDoneBtn.textContent = 'Empezar a comprar';
+      }
       showStep('done');
     });
 
-    document.getElementById('closeDone').addEventListener('click', closeModal);
+    document.getElementById('closeDone').addEventListener('click', () => {
+      closeModal();
+      if(state.pendingCheckout) proceedToCheckout();
+    });
 
     /* abrir directo en "editar dirección" desde el carrito */
     window.__openShippingAtAddress = () => openModal(state.country ? 'address' : 'country');
